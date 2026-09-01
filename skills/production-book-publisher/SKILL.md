@@ -99,6 +99,10 @@ metadata) — never stock images with unknown licenses.
   `validation/pdf-preflight.txt`.
 - Invoke `kdp-audit` over the manuscript + built artifacts + metadata →
   `validation/kdp-audit.md` (Critical vs Warnings gap report).
+- If the source ships a `passport.yaml` claim ledger, re-run every `check`
+  and record the result in the preflight report — a FAIL/STALE entry at
+  production time is a Critical (the manuscript changed after its last
+  verification).
 
 **Gate:** Critical findings must be either fixed and re-built, or explicitly
 accepted by the user, before Step 11.

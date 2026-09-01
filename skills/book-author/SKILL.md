@@ -64,9 +64,35 @@ running threads):
   by a runnable module in `code/chNN/`, with a test suite pinning the printed
   numbers. This is what makes the later review phases verify instead of
   trust. Fresh-kernel execution before a chapter is called done.
+- **The claim ledger (`passport.yaml`)** — pytest pins protect tables; the
+  errors that survive live in PROSE claims about numbers ("more than a
+  third", "nearly certain"). So every prose sentence asserting a specific
+  quantitative fact that is NOT a verbatim table paste gets an entry in
+  `passport.yaml` at the book root (pattern from
+  pedrohcgs/claude-code-my-workflow):
+
+  ```yaml
+  claims:
+    - id: ch03-truncation-59bit          # kebab, stable across edits
+      file: book/ch03-identifier-safety.md
+      claim: "at 59 bits kept, a billion IDs collide with p = 5.8e-01"
+      check: "code/ch03/identifiers.py::truncated_collision_p(59, 10**9)"
+      expected: "0.57994 → prints 5.8e-01"
+      status: PASS        # PASS | FAIL | STALE | UNVERIFIED
+      verified: 2026-09-01
+      by: math-auditor
+  ```
+
+  Lifecycle: drafters register claims as UNVERIFIED with a runnable `check`;
+  the math-auditor pass runs every check and sets PASS/FAIL; ANY later edit
+  to a claim's file flips its entries to STALE (the editing agent's duty);
+  a stage does not close with FAIL/STALE/UNVERIFIED entries. Downstream
+  phases consult the ledger before re-deriving — a PASS claim over unchanged
+  text needs a spot-check, not a fresh derivation.
 - After each module of chapters: `iterator` + `quality-auditor` +
   `math-auditor` agents for a self-review pass before moving on (cheaper than
-  finding structural problems at Phase 1).
+  finding structural problems at Phase 1). The math-auditor pass is also the
+  ledger verification run.
 
 ## Stage 5 — De-AI pass
 
@@ -86,5 +112,6 @@ Phase 2 builds interiors. Record the decision either way.
 ## Handoff
 
 Final report: chapter word counts, executable-chapter coverage, source count,
+claim-ledger totals (N claims, all PASS — or list the exceptions),
 open `[source needed]` flags, and the exact next command:
 `/scientific-book-editor <book-dir>/book/`.

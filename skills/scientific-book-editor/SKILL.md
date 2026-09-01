@@ -34,6 +34,19 @@ pipeline.
 - Revised manuscript goes to `<book-dir>/../revised-book/` (a full copy, then
   edited).
 
+## The claim ledger (`passport.yaml`)
+
+If the book ships a `passport.yaml` (see book-author Stage 4), every phase
+uses it: reviewers CONSULT it before re-deriving (a PASS claim over unchanged
+text gets a spot-check, not a fresh derivation — record disagreements as
+findings against the ledger itself); Phase 2's reviewer re-runs the `check`
+commands as its reproducibility pass; Phase 5 appliers flip entries whose
+files they edit to STALE and re-verify them before the phase closes; new
+quantitative prose claims introduced during revision get NEW entries. If the
+book has no ledger, Phase 5 creates one for the claims the reviews litigated,
+so the next cycle doesn't re-litigate them. No phase closes with
+FAIL/STALE/UNVERIFIED entries.
+
 ## Scale rule (books are not papers)
 
 Every phase below was designed for papers; a book is 10–20× longer. For any
@@ -55,9 +68,25 @@ chapter shards:
 - `writing-reviewer` — prose quality at the structural level
 - `bibliography-auditor` — reference list hygiene (existence checked in Phase 3)
 
+Plus the **adversarial pair** (community pattern from
+claesbackman/AI-research-feedback; spawn as two general-purpose agents):
+
+- **skeptic** — its ONLY job is to attack the manuscript's theses: hunt
+  overclaims, unfalsifiable statements ("no system has ever…"),
+  unsupported superlatives ("the most common way…"), evidence cited for a
+  different claim than it supports, and genre party tricks. It does not
+  review dimensions the five above own; it prosecutes the argument.
+- **advocate** — the symmetric role nobody else has: build the strongest
+  case FOR the book's deliberate choices (voice, structure, framing,
+  conventions), and flag any reviewer finding whose "fix" would damage an
+  intentional design. The advocate's defenses are the first input when two
+  reviewers conflict.
+
 Synthesize into `editorial-report.md` ending with a **verdict**, exactly one of:
 `PUBLISH` · `MINOR REVISION` · `MAJOR REVISION` · `DO NOT PUBLISH`, each with
-the blocking findings that justify it.
+the blocking findings that justify it. The synthesis carries an adversarial
+section: skeptic charges with the advocate's answer to each, and which side
+the verdict took.
 
 **Gate:** on `DO NOT PUBLISH`, stop the pipeline and report to the user. On any
 other verdict, continue.
