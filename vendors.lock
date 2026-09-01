@@ -1,0 +1,13 @@
+# book-pipeline vendor lock — repo URL <space> pinned SHA <space> local clone name
+# Update a pin deliberately (git -C <clone> pull && update SHA), never blindly.
+https://github.com/labarba/sciwrite 64b128b88fdaadfd1eb312f42c2ae1475f91b512 sciwrite
+https://github.com/andrehuang/academic-writing-agents d4d9d3a21afbccd4aee9237a70611429e7df4fba academic-writing-agents
+https://github.com/neuromechanist/research-skills af4f609f395d825ea2d2dadddc223be70ae904da research-skills
+https://github.com/OpenGHz/academic-human-in-the-loop 444bdaefd9d3ebb23cfabf3b4acafc15475ae8eb academic-human-in-the-loop
+https://github.com/YSLAB-ai/manuscript-writing f83e99ff87c2dd4a76328e4f2d022685941c7246 manuscript-writing
+https://github.com/ghanemzadeh/claude-skills 3a8037ded4426cce93f6aa0a5fcc6c1f43f48cf8 claude-skills
+https://github.com/yoelf22/book-typesetting-skill 736461b67d58a9321bf1d8bd4fe40e03284cd565 book-typesetting-skill
+https://github.com/nikmcfly/kindle-book-skill aa66cdf586b373ca0b771ec49c4b377ee5b99080 kindle-book-skill
+https://github.com/nikmcfly/kindle-cover-skill 954eb8efc270397a635b92088c5a6eea815bf938 kindle-cover-skill
+https://github.com/queelius/claude-anvil ed58e9a06ea806b36ba49dd7cb6379282401e217 claude-anvil
+https://github.com/arturseo-geo/ebook-publishing-skill 8c234813dfee2846703769ac821f0a9aae42a4b6 ebook-publishing-skill

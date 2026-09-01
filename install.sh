@@ -1,0 +1,175 @@
+#!/usr/bin/env bash
+# book-pipeline installer — reproduces the full 3-command book pipeline on any machine.
+# Idempotent: existing installs are skipped unless --force. Test with CLAUDE_DIR=/tmp/x ./install.sh
+set -euo pipefail
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"
+SKILLS="$CLAUDE_DIR/skills"
+AGENTS="$CLAUDE_DIR/agents"
+VENDOR="$SKILLS/_vendor"
+VENV="$CLAUDE_DIR/venvs/book-pipeline"
+FORCE=0
+[ "${1:-}" = "--force" ] && FORCE=1
+[ "${1:-}" = "--check" ] && { bash "$HERE/scripts/doctor.sh"; exit $?; }
+
+log()  { printf '\033[32m==>\033[0m %s\n' "$*"; }
+warn() { printf '\033[33mwarn\033[0m %s\n' "$*"; }
+
+install_dir() { # $1 src dir, $2 dest dir
+  if [ -d "$2" ] && [ "$FORCE" = 0 ]; then warn "exists, skipped: $2"; return 1; fi
+  rm -rf "$2"; mkdir -p "$(dirname "$2")"; cp -R "$1" "$2"
+}
+
+mkdir -p "$SKILLS" "$AGENTS" "$VENDOR" "$CLAUDE_DIR/principles" "$CLAUDE_DIR/venvs"
+
+# ── 1. Vendors at pinned SHAs ────────────────────────────────────────────────
+log "Cloning vendors (pinned)"
+grep -v '^#' "$HERE/vendors.lock" | while read -r url sha name; do
+  [ -z "$name" ] && continue
+  d="$VENDOR/$name"
+  if [ ! -d "$d/.git" ]; then
+    git clone -q "$url" "$d"
+  fi
+  git -C "$d" fetch -q origin "$sha" 2>/dev/null || git -C "$d" fetch -q origin
+  git -C "$d" checkout -q "$sha"
+  echo "  $name @ ${sha:0:10}"
+done
+
+# ── 2. Orchestrators (this repo's own skills) ───────────────────────────────
+log "Installing orchestrator skills"
+for s in book-author scientific-book-editor production-book-publisher; do
+  install_dir "$HERE/skills/$s" "$SKILLS/$s" && echo "  $s" || true
+done
+
+# ── 3. sciwrite (whole vendor clone IS the skill) ───────────────────────────
+install_dir "$VENDOR/sciwrite" "$SKILLS/sciwrite" && echo "  sciwrite" || true
+
+# ── 4. research-skills: paper-review + drafting set ─────────────────────────
+log "Installing research-skills set"
+RS="$VENDOR/research-skills/plugins/manuscript"
+install_dir "$RS/skills/paper-review" "$SKILLS/paper-review" || true
+install_dir "$RS/skills/humanizer"    "$SKILLS/humanizer"    || true
+install_dir "$RS/skills/lit-review"   "$SKILLS/lit-review"   || true
+if install_dir "$RS/skills/manuscript-writing" "$SKILLS/manuscript-drafting"; then
+  sed -i.bak 's/^name: manuscript-writing/name: manuscript-drafting/' "$SKILLS/manuscript-drafting/SKILL.md" && rm -f "$SKILLS/manuscript-drafting/SKILL.md.bak"
+fi
+cp "$RS/agents/paper-review.md" "$AGENTS/paper-review.md"
+
+# ── 5. citation-audit (patched: Codex MCP → Claude subagents) ───────────────
+log "Installing citation-audit (adapted)"
+AH="$VENDOR/academic-human-in-the-loop"
+if [ ! -d "$SKILLS/citation-audit" ] || [ "$FORCE" = 1 ]; then
+  rm -rf "$SKILLS/citation-audit"
+  mkdir -p "$SKILLS/citation-audit/tools"
+  cp "$AH/skills/citation-audit/SKILL.md" "$SKILLS/citation-audit/SKILL.md"
+  cp -R "$AH/skills/shared-references" "$SKILLS/citation-audit/shared-references"
+  cp "$AH/tools/verify_paper_audits.sh" "$AH/tools/refresh_audit_hashes.py" "$SKILLS/citation-audit/tools/" 2>/dev/null || true
+  sed -i.bak \
+    -e 's|(\.\./shared-references/|(shared-references/|g' \
+    -e 's|allowed-tools: Bash(\*), Read, Grep, Glob, Edit, Write, mcp__codex__codex, WebSearch, WebFetch|allowed-tools: Bash(*), Read, Grep, Glob, Edit, Write, Agent, WebSearch, WebFetch|' \
+    "$SKILLS/citation-audit/SKILL.md" && rm -f "$SKILLS/citation-audit/SKILL.md.bak"
+  python3 - "$SKILLS/citation-audit/SKILL.md" "$HERE/patches/citation-audit-adaptation.md" <<'PY'
+import sys
+from pathlib import Path
+p, note = Path(sys.argv[1]), Path(sys.argv[2]).read_text()
+parts = p.read_text().split("---\n", 2)
+p.write_text(parts[0] + "---\n" + parts[1] + "---\n\n" + note + "\n" + parts[2])
+PY
+  echo "  citation-audit (Codex→Claude patch + bundled shared-references)"
+fi
+
+# ── 6. standalone manuscript-writing → manuscript-revision ──────────────────
+if [ ! -d "$SKILLS/manuscript-revision" ] || [ "$FORCE" = 1 ]; then
+  rm -rf "$SKILLS/manuscript-revision"; mkdir -p "$SKILLS/manuscript-revision"
+  cp "$VENDOR/manuscript-writing/SKILL.md" "$SKILLS/manuscript-revision/SKILL.md"
+  cp -R "$VENDOR/manuscript-writing/references" "$SKILLS/manuscript-revision/references"
+  sed -i.bak 's/^name: manuscript-writing/name: manuscript-revision/' "$SKILLS/manuscript-revision/SKILL.md" && rm -f "$SKILLS/manuscript-revision/SKILL.md.bak"
+  echo "  manuscript-revision (renamed from standalone manuscript-writing)"
+fi
+
+# ── 7. line-and-copy-editor ─────────────────────────────────────────────────
+install_dir "$VENDOR/claude-skills/line-and-copy-editor" "$SKILLS/line-and-copy-editor" || true
+
+# ── 8. book-typesetting via its own installer ───────────────────────────────
+log "Installing book-typesetting (vendor INSTALL.sh)"
+if [ ! -d "$SKILLS/book-typesetting" ] || [ "$FORCE" = 1 ]; then
+  BT_FLAGS="--dir $SKILLS/book-typesetting"
+  [ "$FORCE" = 1 ] && BT_FLAGS="$BT_FLAGS --force"
+  ( cd "$VENDOR/book-typesetting-skill" && bash INSTALL.sh $BT_FLAGS >/dev/null ) \
+    || { rm -rf "$SKILLS/book-typesetting"; cp -R "$VENDOR/book-typesetting-skill" "$SKILLS/book-typesetting"; rm -rf "$SKILLS/book-typesetting/.git"; }
+  echo "  book-typesetting"
+fi
+
+# ── 9. kindle-book / kindle-cover ───────────────────────────────────────────
+if [ ! -d "$SKILLS/kindle-book" ] || [ "$FORCE" = 1 ]; then
+  rm -rf "$SKILLS/kindle-book"; mkdir -p "$SKILLS/kindle-book"
+  for d in SKILL.md scripts assets references; do cp -R "$VENDOR/kindle-book-skill/$d" "$SKILLS/kindle-book/"; done
+fi
+if [ ! -d "$SKILLS/kindle-cover" ] || [ "$FORCE" = 1 ]; then
+  rm -rf "$SKILLS/kindle-cover"; mkdir -p "$SKILLS/kindle-cover"
+  cp "$VENDOR/kindle-cover-skill/SKILL.md" "$SKILLS/kindle-cover/"
+  cp -R "$VENDOR/kindle-cover-skill/scripts" "$SKILLS/kindle-cover/"
+fi
+echo "  kindle-book · kindle-cover"
+
+# ── 10. KDP skills (docs bundled, plugin-root refs rewritten) ───────────────
+log "Installing KDP skills"
+for k in kdp-audit kdp-listing; do
+  if [ ! -d "$SKILLS/$k" ] || [ "$FORCE" = 1 ]; then
+    rm -rf "$SKILLS/$k"
+    cp -R "$VENDOR/claude-anvil/kdp/skills/$k" "$SKILLS/$k"
+    cp -R "$VENDOR/claude-anvil/kdp/docs" "$SKILLS/$k/docs"
+    sed -i.bak 's|${CLAUDE_PLUGIN_ROOT}/docs|docs|g' "$SKILLS/$k/SKILL.md" && rm -f "$SKILLS/$k/SKILL.md.bak"
+    echo "  $k"
+  fi
+done
+# NOTE: kdp-publish and the kdp-cover MCP are deliberately NOT installed (OpenAI API dependency).
+
+# ── 11. ebook-publishing ────────────────────────────────────────────────────
+if [ ! -d "$SKILLS/ebook-publishing" ] || [ "$FORCE" = 1 ]; then
+  rm -rf "$SKILLS/ebook-publishing"; mkdir -p "$SKILLS/ebook-publishing"
+  cp "$VENDOR/ebook-publishing-skill/SKILL.md" "$SKILLS/ebook-publishing/"
+  cp -R "$VENDOR/ebook-publishing-skill/references" "$SKILLS/ebook-publishing/"
+  echo "  ebook-publishing"
+fi
+
+# ── 12. bookwright (3 skills) ───────────────────────────────────────────────
+log "Installing bookwright skills"
+for k in textbook-methodology notebook-paired-with-prose cross-reference-discipline; do
+  install_dir "$VENDOR/claude-anvil/bookwright/skills/$k" "$SKILLS/$k" && echo "  $k" || true
+done
+
+# ── 13. Agents (academic ×12 + bookwright ×11) + principles ─────────────────
+log "Installing agents"
+cp "$VENDOR/academic-writing-agents/principles/academic-writing.md" "$CLAUDE_DIR/principles/"
+n=0
+for f in "$VENDOR/academic-writing-agents/agents/"*.md "$VENDOR/claude-anvil/bookwright/agents/"*.md; do
+  b="$(basename "$f")"
+  if [ -e "$AGENTS/$b" ] && [ "$FORCE" = 0 ]; then continue; fi
+  cp "$f" "$AGENTS/$b"
+  # upstream hardcodes its author's home path in the academic agents
+  sed -i.bak "s|/Users/owl/.claude|$CLAUDE_DIR|g" "$AGENTS/$b" && rm -f "$AGENTS/$b.bak"
+  n=$((n+1))
+done
+echo "  $n agent files installed/updated"
+
+# ── 14. Python venv for production helpers ──────────────────────────────────
+log "Python venv ($VENV)"
+if command -v uv >/dev/null; then
+  [ -d "$VENV" ] || uv venv -q "$VENV"
+  VIRTUAL_ENV="$VENV" uv pip install -q pydantic pytest reportlab Pillow pypdf fonttools
+else
+  [ -d "$VENV" ] || python3 -m venv "$VENV"
+  "$VENV/bin/pip" install -q pydantic pytest reportlab Pillow pypdf fonttools
+fi
+echo "  pydantic pytest reportlab Pillow pypdf fonttools"
+
+# ── 15. Doctor ──────────────────────────────────────────────────────────────
+log "Toolchain check"
+bash "$HERE/scripts/doctor.sh" || true
+
+log "Done. New Claude Code sessions will see the skills. Workflow:"
+echo '  /book-author "an idea"          → book/ + SYLLABUS.md + METADATA.md'
+echo '  /scientific-book-editor ./book/ → 4 reports + verdict + revised-book/'
+echo '  /production-book-publisher ./revised-book/ → dist/{ebook,paperback,validation}'
