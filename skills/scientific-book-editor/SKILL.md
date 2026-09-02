@@ -49,6 +49,28 @@ book has no ledger, Phase 5 creates one for the claims the reviews litigated,
 so the next cycle doesn't re-litigate them. No phase closes with
 FAIL/STALE/UNVERIFIED entries.
 
+## Phase 0 — Deterministic gates (before spending any review budget)
+
+Run these two before Phase 1, not instead of it — they catch a different
+class of defect (mechanical) than LLM reviewers catch (judgment), and they
+cannot be talked into a favorable read the way a confident chapter
+occasionally talks a reviewer into one:
+
+```bash
+python3 ~/.claude/scripts/aimprenta/check_structure.py <book-dir>
+python3 ~/.claude/scripts/aimprenta/check_readability.py <book-dir>
+```
+
+`check_structure.py` catches truncation markers, empty sections, and
+malformed code fences — zero-cost, zero-ambiguity findings a chapter
+shouldn't reach Phase 1 with. `check_readability.py` reports Flesch Reading
+Ease per chapter and flags chapters that read very differently from the
+book's own average — not a verdict (a technical book's "right" score is
+audience-dependent), just a pointer to look closer, either at a deliberate
+register shift or a drafting agent that drifted. Fold both scripts' output
+into `editorial-report.md`'s findings; don't create a separate report file
+for them.
+
 ## Scale rule (books are not papers)
 
 Every phase below was designed for papers; a book is 10–20× longer. For any
@@ -134,7 +156,16 @@ revision mode to apply the approved changes there, sharded by chapter. Rules
 for appliers: locate edits by the report's exact ORIGINAL text; where a finding
 contradicts program output, run the program first and fix the wrong side; where
 a claim quotes shipped code verbatim, never silently change either side. After
-edits, re-run the book's own test suites / build if it has them.
+edits, re-run the book's own test suites / build if it has them — if the book
+ships `passport.yaml` ledgers, run
+`python3 ~/.claude/scripts/aimprenta/check_claims.py <book-dir>` rather than
+spot-checking a few chapters by hand: it re-runs every chapter's suite and
+reports exactly which recorded claims no longer verify, cross-referenced
+against `KNOWN-ISSUES.md` so a documented environment-version pin doesn't
+get mistaken for a real regression. This has caught a real one before: a
+prose-edit pass changed a pasted table's wording without updating the code
+that generates it, breaking the verbatim-pin contract in a way a spot-check
+of 1–2 sample chapters did not happen to hit.
 
 ## Phase 6 — Final line/copy edit → `style-sheet.md`
 
@@ -204,10 +235,10 @@ before/after pattern from the report.
 
 **Verify (mandatory, done by the orchestrator, not trusted from agent
 self-report):** an independent grep sweep confirming the pattern is
-actually gone outside protected zones (label IDs, code, comments), plus a
-re-run of any test suite / `passport.yaml` checks the applied edits could
-have touched. Only after this verification does the manuscript become the
-canonical source for `production-book-publisher`.
+actually gone outside protected zones (label IDs, code, comments), plus
+`python3 ~/.claude/scripts/aimprenta/check_claims.py <book-dir>` if the book ships
+`passport.yaml` ledgers. Only after this verification does the manuscript
+become the canonical source for `production-book-publisher`.
 
 ## Failure and honesty rules
 

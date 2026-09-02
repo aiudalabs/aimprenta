@@ -133,6 +133,22 @@ Design principles behind the three orchestrators, each earned on a real book:
   rasterized sample pages (front matter, a math/figure/table page, and
   pages spread across the book cross-checked against expected chapter
   topics) before a build is called done.
+- **Deterministic gates alongside LLM judgment, not instead of it**:
+  `scripts/check_structure.py` and `scripts/check_readability.py` (zero
+  network, zero model call) catch truncation markers, empty sections, and
+  readability outliers before Phase 1 spends any review budget — mechanical
+  checks a confident-sounding chapter can't talk a reviewer out of.
+- **STALE is enforced, not a convention**: `scripts/check_claims.py`
+  re-runs every chapter's test suite against its `passport.yaml` and reports
+  disagreements — cross-referenced against `KNOWN-ISSUES.md` so a documented
+  environment-version pin isn't mistaken for real drift. It has already
+  caught a real regression: a prose edit changed a pasted table's wording
+  without updating the code that generates it, silently breaking the
+  verbatim-pin contract.
+- **The time/cost commitment is stated, not discovered mid-run**:
+  `book-author` gives an honest order-of-magnitude estimate at the brief
+  gate and a sharper one at the outline gate, once chapter count is known —
+  agent-dispatch count and expected wall-clock time, not a hedge.
 
 `docs/community-validation.md` maps each of these practices to its
 community-validated equivalent (nbval, artifact evaluation, Paged.js, …) with

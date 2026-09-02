@@ -99,10 +99,12 @@ metadata) — never stock images with unknown licenses.
   `validation/pdf-preflight.txt`.
 - Invoke `kdp-audit` over the manuscript + built artifacts + metadata →
   `validation/kdp-audit.md` (Critical vs Warnings gap report).
-- If the source ships a `passport.yaml` claim ledger, re-run every `check`
-  and record the result in the preflight report — a FAIL/STALE entry at
-  production time is a Critical (the manuscript changed after its last
-  verification).
+- If the source ships a `passport.yaml` claim ledger, run
+  `python3 ~/.claude/scripts/aimprenta/check_claims.py <book-dir>` and record
+  its result in the preflight report — a FAIL/STALE entry at production
+  time is a Critical (the manuscript changed after its last verification).
+  The script cross-references `KNOWN-ISSUES.md` so a documented
+  environment-version pin isn't mistaken for a real regression.
 
 ### Visual spot-check (MANDATORY — not satisfied by any automated tool passing)
 

@@ -30,8 +30,20 @@ WebSearch, or from code the chapter actually runs.
 Interview the user briefly (subject, audience, what the reader can do after
 reading, scope boundaries), then spawn `brainstormer` and `research-analyst`
 agents to pressure-test the concept: what exists already, what's the gap, what
-would make this book distinctive. Produce `BRIEF.md` (one page). **Gate: user
-approves the brief.**
+would make this book distinctive. Produce `BRIEF.md` (one page).
+
+**State a rough time/cost expectation before the gate, honestly, even
+without a precise number yet** — chapter count isn't known until Stage 3, so
+this is order-of-magnitude, not a quote: a book-length manuscript with
+executable-chapter discipline typically means dozens of agent dispatches
+across drafting, review, and production, and multiple hours of wall-clock
+time end to end — more if the reviewer panel or a production issue (LaTeX,
+EPUB validation, a chapter-numbering bug) needs debugging along the way, as
+has happened on real runs of this pipeline. Say this plainly, don't bury
+it — the point is that the user commits to the outline knowing roughly what
+they're committing to, not finding out from silence partway through.
+
+**Gate: user approves the brief.**
 
 ## Stage 2 — Sources
 
@@ -47,8 +59,18 @@ Invoke `textbook-methodology` (bookwright): atom-outward design, deferral
 discipline, running threads, page budgets. Output: `SYLLABUS.md` mapping
 modules → chapters → sections, with per-chapter page budgets and dependency
 order. This file is canonical downstream — later phases (module references,
-build order) read it, so keep it updated when scope changes. **Gate: user
-approves the outline.**
+build order) read it, so keep it updated when scope changes.
+
+**Now that chapter count is known, sharpen the Stage 1 estimate into a real
+one before the gate:** roughly 1 drafting agent per chapter plus its module
+self-review, then a 7-reviewer panel + peer review + citation audit +
+sciwrite + a coherence read in `scientific-book-editor` (mostly independent
+of chapter count), then production. For an N-chapter book, expect on the
+order of N to 2N agent dispatches in drafting alone, another ~15–20 across
+editorial, and several hours of wall-clock time overall — say the actual
+number, not a hedge, so the user is approving a real commitment.
+
+**Gate: user approves the outline.**
 
 ## Stage 4 — Draft chapters
 

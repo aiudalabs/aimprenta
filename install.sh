@@ -173,18 +173,26 @@ for f in "$VENDOR/academic-writing-agents/agents/"*.md "$VENDOR/claude-anvil/boo
 done
 echo "  $n agent files installed/updated"
 
-# ── 14. Python venv for production helpers ──────────────────────────────────
+# ── 14. Deterministic gate scripts — installed, not just in this clone ──────
+# These are referenced by scientific-book-editor and production-book-publisher
+# from an absolute path so they keep working after the clone is deleted.
+log "Installing gate scripts (~/.claude/scripts/aimprenta)"
+mkdir -p "$CLAUDE_DIR/scripts/aimprenta"
+cp "$HERE/scripts/check_structure.py" "$HERE/scripts/check_readability.py" "$HERE/scripts/check_claims.py" "$CLAUDE_DIR/scripts/aimprenta/"
+echo "  check_structure.py check_readability.py check_claims.py"
+
+# ── 15. Python venv for production helpers ──────────────────────────────────
 log "Python venv ($VENV)"
 if command -v uv >/dev/null; then
   [ -d "$VENV" ] || uv venv -q "$VENV"
-  VIRTUAL_ENV="$VENV" uv pip install -q pydantic pytest reportlab Pillow pypdf fonttools
+  VIRTUAL_ENV="$VENV" uv pip install -q pydantic pytest reportlab Pillow pypdf fonttools pyyaml
 else
   [ -d "$VENV" ] || python3 -m venv "$VENV"
-  "$VENV/bin/pip" install -q pydantic pytest reportlab Pillow pypdf fonttools
+  "$VENV/bin/pip" install -q pydantic pytest reportlab Pillow pypdf fonttools pyyaml
 fi
-echo "  pydantic pytest reportlab Pillow pypdf fonttools"
+echo "  pydantic pytest reportlab Pillow pypdf fonttools pyyaml"
 
-# ── 15. Doctor ──────────────────────────────────────────────────────────────
+# ── 16. Doctor ──────────────────────────────────────────────────────────────
 log "Toolchain check"
 bash "$HERE/scripts/doctor.sh" || true
 
