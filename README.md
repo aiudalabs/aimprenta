@@ -1,5 +1,7 @@
 ![aimprenta](docs/logo/aimprenta-logo.svg)
 
+**[aiudalabs.github.io/aimprenta →](https://aiudalabs.github.io/aimprenta/)**
+
 A repeatable, three-command system for producing professional technical books
 with Claude Code — from idea to upload-ready KDP files.
 
