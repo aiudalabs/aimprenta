@@ -1,4 +1,4 @@
-# aimprenta
+![aimprenta](docs/logo/aimprenta-logo.svg)
 
 A repeatable, three-command system for producing professional technical books
 with Claude Code — from idea to upload-ready KDP files.

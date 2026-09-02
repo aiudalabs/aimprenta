@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 560 132" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="aim-logo-title"
+     font-family="Georgia, 'Times New Roman', 'Noto Serif', serif">
+  <title id="aim-logo-title">aimprenta</title>
+
+  <!-- card so the wordmark stays legible on any background (light or dark README theme) -->
+  <rect x="1" y="1" width="558" height="130" rx="18" fill="#f6f1e7" stroke="#20181214" stroke-width="1"/>
+
+  <!-- mark -->
+  <g transform="translate(16,16)">
+    <rect x="4" y="4" width="92" height="92" rx="20" fill="#201812"/>
+    <g stroke="#f6f1e7" stroke-width="10.5" stroke-linecap="square" stroke-linejoin="miter" fill="none">
+      <path d="M50,22 L27,78"/>
+      <path d="M50,22 L73,78"/>
+      <path d="M36,55 L64,55"/>
+    </g>
+    <rect x="27" y="84" width="46" height="6" rx="3" fill="#b5432f"/>
+  </g>
+
+  <!-- wordmark: the bilingual pun is the logo — "AI" carries the accent, "mprenta" stays ink -->
+  <text x="132" y="76" font-size="46" font-weight="700" letter-spacing="0.2">
+    <tspan fill="#b5432f">AI</tspan><tspan fill="#201812">mprenta</tspan>
+  </text>
+  <text x="134" y="100" font-size="13" fill="#5b5147" letter-spacing="0.6" font-style="italic">
+    idea → editorial QA → upload-ready book
+  </text>
+</svg>

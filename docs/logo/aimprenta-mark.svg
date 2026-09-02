@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="aim-mark-title">
+  <title id="aim-mark-title">aimprenta mark</title>
+  <rect x="4" y="4" width="112" height="112" rx="26" fill="#201812"/>
+  <g stroke="#f6f1e7" stroke-width="13" stroke-linecap="square" stroke-linejoin="miter" fill="none">
+    <path d="M60,26 L32,92"/>
+    <path d="M60,26 L88,92"/>
+    <path d="M43,66 L77,66"/>
+  </g>
+  <rect x="32" y="100" width="56" height="7" rx="3.5" fill="#b5432f"/>
+</svg>
