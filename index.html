@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>aimprenta — book production for Claude Code</title>
+<script>
+  try{
+    var saved = localStorage.getItem('aimprenta-theme');
+    if(saved === 'light' || saved === 'dark'){
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+  }catch(e){}
+</script>
 <meta name="description" content="A three-command system for producing professional technical books with Claude Code: idea, editorial QA with an adversarial review pair, and upload-ready KDP files.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect x='4' y='4' width='112' height='112' rx='26' fill='%23201812'/%3E%3Cg stroke='%23f6f1e7' stroke-width='13' stroke-linecap='square' stroke-linejoin='miter' fill='none'%3E%3Cpath d='M60,26 L32,92'/%3E%3Cpath d='M60,26 L88,92'/%3E%3Cpath d='M43,66 L77,66'/%3E%3C/g%3E%3Crect x='32' y='100' width='56' height='7' rx='3.5' fill='%23b5432f'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -136,15 +144,40 @@
   @media (max-width:560px){ .grid{ grid-template-columns:1fr; } }
 
   @media (prefers-color-scheme: dark){
-    :root{
+    :root:not([data-theme="light"]){
       --ink:#f2ece1; --ink-soft:#c8bfae; --ink-faint:#8c8172;
       --paper:#1b140f; --paper-raised:#241b14; --line:#f2ece11f;
       --accent:#e08a6f; --accent-soft:#3a241d;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.6);
     }
-    .btn.primary{ background:var(--ink); color:var(--paper); }
-    .install{ background:#0f0b08; }
-    .strip{ background:#0f0b08; }
+    :root:not([data-theme="light"]) .btn.primary{ background:var(--ink); color:var(--paper); }
+    :root:not([data-theme="light"]) .install{ background:#0f0b08; }
+    :root:not([data-theme="light"]) .strip{ background:#0f0b08; }
+  }
+  :root[data-theme="dark"]{
+    --ink:#f2ece1; --ink-soft:#c8bfae; --ink-faint:#8c8172;
+    --paper:#1b140f; --paper-raised:#241b14; --line:#f2ece11f;
+    --accent:#e08a6f; --accent-soft:#3a241d;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.6);
+  }
+  :root[data-theme="dark"] .btn.primary{ background:var(--ink); color:var(--paper); }
+  :root[data-theme="dark"] .install{ background:#0f0b08; }
+  :root[data-theme="dark"] .strip{ background:#0f0b08; }
+
+  /* theme toggle */
+  .theme-toggle{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border-radius:8px; border:1.5px solid var(--ink);
+    background:transparent; cursor:pointer; padding:0; color:var(--ink);
+  }
+  .theme-toggle:hover{ background:var(--paper-raised); }
+  .theme-toggle svg{ width:17px; height:17px; }
+  .theme-toggle .i-moon{ display:none; }
+  :root[data-theme="dark"] .theme-toggle .i-sun{ display:none; }
+  :root[data-theme="dark"] .theme-toggle .i-moon{ display:block; }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .theme-toggle .i-sun{ display:none; }
+    :root:not([data-theme="light"]) .theme-toggle .i-moon{ display:block; }
   }
 </style>
 </head>
@@ -161,6 +194,10 @@
       <a href="#commands">Commands</a>
       <a href="#principles">Principles</a>
       <a class="btn ghost" href="https://github.com/aiudalabs/aimprenta">GitHub ↗</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
     </div>
   </div>
 </nav>
@@ -314,6 +351,26 @@
     </div>
   </div>
 </footer>
+
+<script>
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function effectiveTheme(){
+      var explicit = root.getAttribute('data-theme');
+      if(explicit === 'light' || explicit === 'dark') return explicit;
+      return mql.matches ? 'dark' : 'light';
+    }
+
+    btn.addEventListener('click', function(){
+      var next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try{ localStorage.setItem('aimprenta-theme', next); }catch(e){}
+    });
+  })();
+</script>
 
 </body>
 </html>
