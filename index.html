@@ -95,6 +95,7 @@
 
   /* three commands */
   .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; }
+  .steps.steps-2{ grid-template-columns:repeat(2,1fr); }
   .step{ padding:0 26px; position:relative; }
   .step:first-child{ padding-left:0; }
   .step:last-child{ padding-right:0; }
@@ -192,6 +193,7 @@
     <div class="links">
       <a href="#pipeline">Pipeline</a>
       <a href="#commands">Commands</a>
+      <a href="#papers-articles">Papers &amp; articles</a>
       <a href="#principles">Principles</a>
       <a class="btn ghost" href="https://github.com/aiudalabs/aimprenta">GitHub ↗</a>
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
@@ -207,11 +209,12 @@
     <div class="eyebrow">For technical &amp; scientific nonfiction · Claude Code</div>
     <h1>Write technical books the way a <em>press</em> does.</h1>
     <p class="lede">
-      Not for fiction — this is for books with claims to check. Three
+      Not for fiction — this is for work with claims to check. Three
       commands take a one-line idea through drafting, a seven-reviewer
       editorial panel modeled on academic peer review, and print/EPUB
       production — with a claim ledger that traces every prose number back
-      to code that actually runs.
+      to code that actually runs. The same skill layer also drives lighter
+      pipelines for a single paper or a short-form article.
     </p>
     <div class="ctas">
       <a class="btn primary" href="https://github.com/aiudalabs/aimprenta">View on GitHub</a>
@@ -279,6 +282,42 @@
   </div>
 </section>
 
+<section class="bordered" id="papers-articles">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Also included</div>
+        <h2>Papers and short-form articles</h2>
+      </div>
+      <p>The same authoring and editorial skills, scaled to a single document. Neither pipeline shards — a paper or an article fits in one context.</p>
+    </div>
+    <div class="steps steps-2">
+      <div class="step">
+        <div class="num">P</div>
+        <code>/paper-author</code> + <code>/paper-publisher</code>
+        <h3>Research question → submission</h3>
+        <p>Mandatory literature grounding, a single-pass draft, a non-sharded review (paper-review + citation-audit + sciwrite), then a venue template (arXiv default, or a named venue's class fetched live — never vendored) and a submission checklist. 3 gates.</p>
+        <div class="out"><b>Outputs</b> — manuscript.md, references.bib, submission/paper.pdf</div>
+      </div>
+      <div class="step">
+        <div class="num">A</div>
+        <code>/article-author</code>
+        <h3>Angle → publish-ready</h3>
+        <p>One command, not three. Fact-checking is conditional — only when the piece makes a verifiable claim. Platform limits (LinkedIn, Medium, plain markdown) are checked live via WebSearch, never hardcoded, since they change.</p>
+        <div class="out"><b>Outputs</b> — article.md, formatted/{platform}.md</div>
+      </div>
+    </div>
+    <div class="diagram-card" style="margin-top:34px;">
+      <img src="assets/aimprenta-paper-pipeline.svg" alt="Diagram: a research question moves through paper-author's mandatory literature review, a single non-sharded draft and review pass, gated revision, and paper-publisher's venue template and submission checklist.">
+    </div>
+    <p class="diagram-caption">The paper pipeline — 3 gates, no chapter-sharding.</p>
+    <div class="diagram-card" style="margin-top:22px;">
+      <img src="assets/aimprenta-article-pipeline.svg" alt="Diagram: an angle moves through article-author's conditional fact-check, a single-pass draft, an editorial pass, one approval gate, and platform-specific formatting.">
+    </div>
+    <p class="diagram-caption">The article pipeline — one command, one gate, the lightest of the three.</p>
+  </div>
+</section>
+
 <section class="bordered" id="principles">
   <div class="wrap">
     <div class="section-head">
@@ -329,6 +368,10 @@
   <div class="wrap">
     <div class="strip">
       <div class="stats">
+        <div>
+          <div class="stat">3</div>
+          <div class="stat-label">Pipelines — books, papers, articles</div>
+        </div>
         <div>
           <div class="stat">9/11</div>
           <div class="stat-label">Dependencies vendored</div>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1280 560" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-labelledby="app-title app-desc" font-family="'IBM Plex Mono', 'SFMono-Regular', Menlo, monospace">
+  <title id="app-title">aimprenta: research question to submission-ready paper</title>
+  <desc id="app-desc">Workflow diagram: a research question moves through paper-author's mandatory literature review, a single non-sharded draft, an independent review pass, a gated revision, and paper-publisher's venue template and submission checklist.</desc>
+
+  <defs>
+    <marker id="pp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#9aa0a8"/>
+    </marker>
+  </defs>
+
+  <style>
+    text { fill: #14171c; }
+    .lane-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; fill: #5b6472; text-transform: uppercase; }
+    .node-title { font-size: 13px; font-weight: 600; }
+    .node-sub { font-size: 10.5px; fill: #5b6472; }
+    .node-tag { font-size: 9px; fill: #ffffff; font-weight: 600; }
+    .edge { fill: none; stroke: #9aa0a8; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#pp-arrow); }
+    .lane-band { stroke-width: 1.2; }
+    .lane-band.author { fill: #0e7c6b0d; stroke: #0e7c6b33; }
+    .lane-band.gate { fill: #a8322d0d; stroke: #a8322d55; stroke-dasharray: 5 4; }
+    .lane-band.editor { fill: #b5560f0d; stroke: #b5560f33; }
+    .lane-band.venue { fill: #2a4b9b0d; stroke: #2a4b9b33; }
+    .node-box { stroke-width: 1.6; fill: #ffffff; }
+    .node-box.author { stroke: #0e7c6b; }
+    .node-box.gate { stroke: #a8322d; }
+    .node-box.editor { stroke: #b5560f; }
+    .node-box.venue { stroke: #2a4b9b; }
+    .tag-chip.venue { fill: #2a4b9b; }
+  </style>
+
+  <rect x="0" y="0" width="1280" height="560" fill="#fbfbfa"/>
+
+  <rect class="lane-band author" x="20" y="90" width="1240" height="110" rx="10"/>
+  <text class="lane-label" x="36" y="108">paper-author — framing &amp; drafting</text>
+
+  <rect class="lane-band gate" x="20" y="210" width="1240" height="90" rx="10"/>
+  <text class="lane-label" x="36" y="226" fill="#a8322d">approval gates (3)</text>
+
+  <rect class="lane-band editor" x="20" y="310" width="1240" height="110" rx="10"/>
+  <text class="lane-label" x="36" y="328">paper-author — review &amp; revision</text>
+
+  <rect class="lane-band venue" x="20" y="430" width="1240" height="110" rx="10"/>
+  <text class="lane-label" x="36" y="448">paper-publisher</text>
+
+  <g class="edge">
+    <path d="M195,145 L245,145"/>
+    <path d="M395,145 L445,145"/>
+    <path d="M520,177 L520,223"/>
+    <path d="M595,255 L595,300 L670,300 L670,365 L645,365"/>
+    <path d="M720,333 L720,287"/>
+    <path d="M795,255 L870,255 L870,365 L845,365"/>
+    <path d="M995,365 L1070,365 L1070,255 L1045,255"/>
+    <path d="M1120,287 L1120,453"/>
+  </g>
+
+  <g>
+    <rect class="node-box author" x="45" y="113" width="150" height="64" rx="9"/>
+    <text class="node-title" x="60" y="138">Research question</text>
+    <text class="node-sub" x="60" y="154">BRIEF.md</text>
+  </g>
+
+  <g>
+    <rect class="node-box author" x="245" y="113" width="150" height="64" rx="9"/>
+    <text class="node-title" x="260" y="138">lit-review</text>
+    <text class="node-sub" x="260" y="154">mandatory, not optional</text>
+  </g>
+
+  <g>
+    <rect class="node-box author" x="445" y="113" width="150" height="64" rx="9"/>
+    <text class="node-title" x="460" y="138">Draft</text>
+    <text class="node-sub" x="460" y="154">single pass, no sharding</text>
+  </g>
+
+  <g>
+    <rect class="node-box gate" x="445" y="223" width="150" height="64" rx="9"/>
+    <text class="node-title" x="460" y="248" fill="#a8322d">Approve</text>
+    <text class="node-sub" x="460" y="264">scope &amp; venue</text>
+  </g>
+
+  <g>
+    <rect class="node-box editor" x="645" y="333" width="150" height="64" rx="9"/>
+    <text class="node-title" x="660" y="353">Review</text>
+    <text class="node-sub" x="660" y="368">paper-review + citation-</text>
+    <text class="node-sub" x="660" y="380">audit + sciwrite</text>
+  </g>
+
+  <g>
+    <rect class="node-box gate" x="645" y="223" width="150" height="64" rx="9"/>
+    <text class="node-title" x="660" y="248" fill="#a8322d">Approve</text>
+    <text class="node-sub" x="660" y="264">revision policy</text>
+  </g>
+
+  <g>
+    <rect class="node-box editor" x="845" y="333" width="150" height="64" rx="9"/>
+    <text class="node-title" x="860" y="358">Revision applied</text>
+    <text class="node-sub" x="860" y="374">passport.yaml re-verified</text>
+  </g>
+
+  <g>
+    <rect class="node-box gate" x="1045" y="223" width="150" height="64" rx="9"/>
+    <text class="node-title" x="1060" y="248" fill="#a8322d">Approve</text>
+    <text class="node-sub" x="1060" y="264">submission</text>
+  </g>
+
+  <g>
+    <rect class="node-box venue" x="1045" y="453" width="150" height="64" rx="9"/>
+    <text class="node-title" x="1060" y="473">Venue + checklist</text>
+    <text class="node-sub" x="1060" y="488">template, page limit,</text>
+    <text class="node-sub" x="1060" y="500">anonymization</text>
+  </g>
+
+  <g font-size="10.5" fill="#5b6472">
+    <rect x="20" y="524" width="12" height="12" rx="3" fill="#ffffff" stroke="#0e7c6b" stroke-width="1.6"/>
+    <text x="38" y="534">skill stage</text>
+    <rect x="140" y="524" width="12" height="12" rx="3" fill="#ffffff" stroke="#a8322d" stroke-width="1.6"/>
+    <text x="158" y="534">human approval gate</text>
+  </g>
+  <text x="1260" y="534" font-size="10" fill="#82878e" text-anchor="end">aiudalabs/aimprenta</text>
+</svg>
