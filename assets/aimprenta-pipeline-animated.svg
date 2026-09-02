@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 1280 620" xmlns="http://www.w3.org/2000/svg" role="img"
+<svg viewBox="0 0 1400 620" xmlns="http://www.w3.org/2000/svg" role="img"
      aria-labelledby="aip-title aip-desc" font-family="'IBM Plex Mono', 'SFMono-Regular', Menlo, monospace">
   <title id="aip-title">aimprenta: idea to sellable book</title>
-  <desc id="aip-desc">Workflow diagram: an idea moves through book-author, two human approval gates, scientific-book-editor's review panel, and production-book-publisher into a shippable interior and EPUB.</desc>
+  <desc id="aip-desc">Workflow diagram: an idea moves through book-author, three human approval gates, scientific-book-editor's deterministic gates plus review panel plus mandatory coherence read, and production-book-publisher into a shippable, spot-checked interior and EPUB.</desc>
 
   <style>
     text { fill: #14171c; }
@@ -44,27 +44,27 @@
   </style>
 
   <!-- background -->
-  <rect x="0" y="0" width="1280" height="620" fill="#fbfbfa"/>
+  <rect x="0" y="0" width="1400" height="620" fill="#fbfbfa"/>
 
   <!-- phase headers -->
   <text class="phase-label" x="310" y="34">Idea → manuscript</text>
-  <text class="phase-label" x="690" y="34">Editorial QA</text>
-  <text class="phase-label" x="995" y="34">Sellable artifacts</text>
+  <text class="phase-label" x="880" y="34">Editorial QA</text>
+  <text class="phase-label" x="1260" y="34">Sellable artifacts</text>
   <line x1="20" y1="46" x2="480" y2="46" stroke="#0e7c6b" stroke-width="1.5"/>
-  <line x1="530" y1="46" x2="850" y2="46" stroke="#b5560f" stroke-width="1.5"/>
-  <line x1="900" y1="46" x2="1180" y2="46" stroke="#2a4b9b" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="530" y1="46" x2="1145" y2="46" stroke="#b5560f" stroke-width="1.5"/>
+  <line x1="1185" y1="46" x2="1335" y2="46" stroke="#2a4b9b" stroke-width="1.5" stroke-dasharray="4 3"/>
 
   <!-- lane bands -->
-  <rect class="lane-band author" x="20" y="90" width="1240" height="110" rx="10"/>
+  <rect class="lane-band author" x="20" y="90" width="1360" height="110" rx="10"/>
   <text class="lane-label" x="36" y="108">01 · book-author</text>
 
-  <rect class="lane-band gate" x="20" y="210" width="1240" height="90" rx="10"/>
+  <rect class="lane-band gate" x="20" y="210" width="1360" height="90" rx="10"/>
   <text class="lane-label" x="36" y="226" fill="#a8322d">EX · Author approval</text>
 
-  <rect class="lane-band editor" x="20" y="310" width="1240" height="110" rx="10"/>
+  <rect class="lane-band editor" x="20" y="310" width="1360" height="110" rx="10"/>
   <text class="lane-label" x="36" y="328">03 · scientific-book-editor</text>
 
-  <rect class="lane-band production" x="20" y="430" width="1240" height="110" rx="10"/>
+  <rect class="lane-band production" x="20" y="430" width="1360" height="110" rx="10"/>
   <text class="lane-label" x="36" y="448">04 · production-book-publisher</text>
 
   <!-- edges (orthogonal, animated flow) -->
@@ -75,7 +75,9 @@
     <path d="M575,145 L650,145 L650,365 L615,365"/>
     <path d="M690,333 L690,287"/>
     <path d="M765,255 L840,255 L840,365 L805,365"/>
-    <path d="M955,365 L1030,365 L1030,485 L995,485"/>
+    <path d="M955,365 L995,365"/>
+    <path d="M1070,333 L1070,287"/>
+    <path d="M1145,255 L1220,255 L1220,485 L1185,485"/>
   </g>
 
   <!-- arrowheads -->
@@ -86,14 +88,16 @@
     <path d="M615,365 L607,361 L607,369 Z"/>
     <path d="M690,287 L686,295 L694,295 Z"/>
     <path d="M805,365 L797,361 L797,369 Z"/>
-    <path d="M995,485 L987,481 L987,489 Z"/>
+    <path d="M995,365 L987,361 L987,369 Z"/>
+    <path d="M1070,287 L1066,295 L1074,295 Z"/>
+    <path d="M1185,485 L1177,481 L1177,489 Z"/>
   </g>
 
   <!-- traveling pulse: one idea, riding the whole pipeline -->
   <circle id="traveler-motion" class="traveler" r="5">
-    <animateMotion dur="8s" repeatCount="indefinite"
-      path="M120,145 L195,145 L235,145 L310,145 L310,177 L310,223 L310,255 L385,255 L460,255 L460,145 L425,145 L500,145 L575,145 L650,145 L650,365 L615,365 L690,365 L690,333 L690,287 L690,255 L765,255 L840,255 L840,365 L805,365 L880,365 L955,365 L1030,365 L1030,485 L995,485 L1070,485"/>
-    <animate attributeName="opacity" values="0;1;1;1;0" keyTimes="0;0.03;0.9;0.97;1" dur="8s" repeatCount="indefinite"/>
+    <animateMotion dur="9s" repeatCount="indefinite"
+      path="M120,145 L195,145 L235,145 L310,145 L310,177 L310,223 L310,255 L385,255 L460,255 L460,145 L425,145 L500,145 L575,145 L650,145 L650,365 L615,365 L690,365 L690,333 L690,287 L690,255 L765,255 L840,255 L840,365 L805,365 L880,365 L955,365 L995,365 L1070,365 L1070,333 L1070,287 L1070,255 L1145,255 L1220,255 L1220,485 L1185,485 L1260,485"/>
+    <animate attributeName="opacity" values="0;1;1;1;0" keyTimes="0;0.03;0.9;0.97;1" dur="9s" repeatCount="indefinite"/>
   </circle>
 
   <!-- nodes -->
@@ -130,10 +134,9 @@
   <!-- editorial QA -->
   <g>
     <rect class="node-box editor" x="615" y="333" width="150" height="64" rx="9"/>
-    <text class="node-title" x="630" y="356">Editorial QA</text>
-    <text class="node-sub" x="630" y="371">panel + peer + citations</text>
-    <rect class="tag-chip editor" x="630" y="378" width="98" height="14" rx="7"/>
-    <text class="node-tag" x="637" y="388">10 review passes</text>
+    <text class="node-title" x="630" y="353">Editorial QA</text>
+    <text class="node-sub" x="630" y="368">gates + panel + peer +</text>
+    <text class="node-sub" x="630" y="380">citations + sciwrite</text>
   </g>
 
   <!-- gate 2 -->
@@ -150,11 +153,29 @@
     <text class="node-sub" x="820" y="374">revised-book/</text>
   </g>
 
+  <!-- coherence read (Phase 7) -->
+  <g>
+    <rect class="node-box editor" x="995" y="333" width="150" height="64" rx="9"/>
+    <text class="node-title" x="1010" y="353">Coherence read</text>
+    <text class="node-sub" x="1010" y="368">whole book, not sharded</text>
+    <rect class="tag-chip editor" x="1010" y="374" width="62" height="14" rx="7"/>
+    <text class="node-tag" x="1017" y="384">Phase 7</text>
+  </g>
+
+  <!-- gate 3 -->
+  <g>
+    <rect class="node-box gate" x="995" y="223" width="150" height="64" rx="9"/>
+    <text class="node-title" x="1010" y="248" fill="#a8322d">Approve</text>
+    <text class="node-sub" x="1010" y="264">coherence findings</text>
+  </g>
+
   <!-- artifacts -->
   <g>
-    <rect class="node-box production" x="995" y="453" width="150" height="64" rx="9"/>
-    <text class="node-title" x="1010" y="476">Interior + EPUB</text>
-    <text class="node-sub" x="1010" y="492">dist/, KDP-ready</text>
+    <rect class="node-box production" x="1185" y="453" width="150" height="64" rx="9"/>
+    <text class="node-title" x="1200" y="473">Interior + EPUB</text>
+    <text class="node-sub" x="1200" y="488">dist/, KDP-ready</text>
+    <rect class="tag-chip production" x="1200" y="494" width="82" height="14" rx="7"/>
+    <text class="node-tag" x="1207" y="504">spot-checked</text>
   </g>
 
   <!-- legend -->
@@ -166,5 +187,5 @@
     <circle cx="330" cy="568" r="5" fill="#ffb020"/>
     <text x="344" y="572">the idea, moving through the pipeline</text>
   </g>
-  <text x="1260" y="572" font-size="10" fill="#82878e" text-anchor="end">aiudalabs/aimprenta</text>
+  <text x="1380" y="572" font-size="10" fill="#82878e" text-anchor="end">aiudalabs/aimprenta</text>
 </svg>

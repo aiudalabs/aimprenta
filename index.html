@@ -236,10 +236,10 @@
         <div class="eyebrow">End to end</div>
         <h2>How a book moves through it</h2>
       </div>
-      <p>Two human approval gates, a 7-reviewer panel, and a claim ledger — before anything ships.</p>
+      <p>Three human approval gates, deterministic checks plus a 7-reviewer panel, a mandatory whole-book coherence read, and a claim ledger — before anything ships.</p>
     </div>
     <div class="diagram-card">
-      <img src="assets/aimprenta-pipeline-animated.svg" alt="Diagram: an idea moves through book-author, two approval gates, scientific-book-editor's review panel, and production-book-publisher into a shippable interior and EPUB.">
+      <img src="assets/aimprenta-pipeline-animated.svg" alt="Diagram: an idea moves through book-author, three approval gates, scientific-book-editor's deterministic gates, review panel, and mandatory coherence read, and production-book-publisher into a shippable, spot-checked interior and EPUB.">
     </div>
     <p class="diagram-caption">Live SVG — the flowing edges and the traveling marker are CSS + SMIL animation, no JavaScript.</p>
   </div>
@@ -265,14 +265,14 @@
         <div class="num">02</div>
         <code>/scientific-book-editor</code>
         <h3>Editorial QA</h3>
-        <p>A 7-reviewer panel — the classic 5 plus an adversarial skeptic/advocate pair — independent peer review, a citation audit, and a 5-pass clarity review. Waits for your approval before touching anything.</p>
-        <div class="out"><b>Outputs</b> — 4 reports, revised-book/</div>
+        <p>Zero-network deterministic gates first, then a 7-reviewer panel — the classic 5 plus an adversarial skeptic/advocate pair — independent peer review, a citation audit, and a 5-pass clarity review. Finishes with a mandatory whole-manuscript coherence read no chapter-sharded phase can substitute for. Waits for your approval before touching anything.</p>
+        <div class="out"><b>Outputs</b> — 5 reports, revised-book/</div>
       </div>
       <div class="step">
         <div class="num">03</div>
         <code>/production-book-publisher</code>
         <h3>Sellable artifacts</h3>
-        <p>Print interior (Quarto/LaTeX), validated EPUB3, wrap covers with a computed spine width, PDF preflight, and a KDP compliance audit.</p>
+        <p>Print interior (Quarto/LaTeX), validated EPUB3, wrap covers with a computed spine width, PDF preflight, a KDP compliance audit, and a mandatory visual spot-check of rasterized pages — automated checks alone have passed a book with a chapter-numbering bug before.</p>
         <div class="out"><b>Outputs</b> — dist/{ebook, paperback, validation}</div>
       </div>
     </div>
@@ -312,6 +312,14 @@
       <div class="card">
         <h4>Never fabricate</h4>
         <p>Unknown bibliographic details stay marked unverified. Missing ISBNs are reported absent, never placeholder-filled.</p>
+      </div>
+      <div class="card">
+        <h4>A whole-book read is mandatory</h4>
+        <p>Every review phase shards by chapter — correct for what those phases check, but blind by construction to a defect that only exists accumulated across the whole manuscript. One phase's scope is the entire book, on purpose.</p>
+      </div>
+      <div class="card">
+        <h4>Deterministic gates, not instead of judgment</h4>
+        <p>Zero-network scripts catch truncation markers, empty sections, and readability outliers before any review budget is spent — mechanical checks a confident-sounding chapter can't talk a reviewer out of.</p>
       </div>
     </div>
   </div>
