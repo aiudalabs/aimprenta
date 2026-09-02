@@ -66,8 +66,10 @@
     box-shadow:var(--shadow); overflow-x:auto;
   }
   .install .c1{ color:#e8a48f; }
-  .install div{ white-space:pre; }
-  .install div + div{ margin-top:4px; color:#c8bfae; }
+  .install div{ white-space:pre; margin-top:4px; }
+  .install div:first-child{ margin-top:0; }
+  .install .cm{ color:#8c8172; }
+  .install .step-label{ color:#8c8172; margin-top:14px; }
 
   /* sections */
   section{ padding:56px 0; }
@@ -165,21 +167,26 @@
 
 <header class="hero" id="top">
   <div class="wrap">
-    <div class="eyebrow">For Claude Code</div>
-    <h1>Write books the way a <em>press</em> does.</h1>
+    <div class="eyebrow">For technical &amp; scientific nonfiction · Claude Code</div>
+    <h1>Write technical books the way a <em>press</em> does.</h1>
     <p class="lede">
-      Three commands take a one-line idea through drafting, a seven-reviewer
-      editorial panel, and print/EPUB production — with a claim ledger that
-      catches drift a spellchecker never will.
+      Not for fiction — this is for books with claims to check. Three
+      commands take a one-line idea through drafting, a seven-reviewer
+      editorial panel modeled on academic peer review, and print/EPUB
+      production — with a claim ledger that traces every prose number back
+      to code that actually runs.
     </p>
     <div class="ctas">
       <a class="btn primary" href="https://github.com/aiudalabs/aimprenta">View on GitHub</a>
       <a class="btn ghost" href="https://github.com/aiudalabs/aimprenta#readme">Read the docs</a>
     </div>
     <div class="install">
-<div><span class="c1">$</span> git clone https://github.com/aiudalabs/aimprenta.git &amp;&amp; cd aimprenta</div>
-<div><span class="c1">$</span> ./install.sh</div>
-<div># 9 of 11 dependencies vendored in this repo — no network needed for those</div>
+<div class="cm">1. install the skills once — installs into ~/.claude/, not this folder</div>
+<div><span class="c1">$</span> git clone https://github.com/aiudalabs/aimprenta.git &amp;&amp; cd aimprenta &amp;&amp; ./install.sh</div>
+<div class="cm">2. go to (or create) the folder where your book will actually live</div>
+<div><span class="c1">$</span> mkdir ~/my-book &amp;&amp; cd ~/my-book</div>
+<div class="cm">3. open Claude Code in that folder, then run:</div>
+<div><span class="c1">$</span> /book-author "a book about X"</div>
     </div>
   </div>
 </header>
