@@ -2,21 +2,29 @@
 
 **[aiudalabs.github.io/aimprenta →](https://aiudalabs.github.io/aimprenta/)**
 
-A repeatable, three-command system for producing **technical and scientific
-nonfiction** with Claude Code — from idea to upload-ready KDP files. Not for
-fiction: the core of the system is a claim ledger that checks every prose
-number against code that actually runs, plus an editorial panel modeled on
-academic peer review (citation audits against primary sources, a math
-auditor, a Sainani-style writing-clarity pass). A novel has no such claims to
-verify — this tool doesn't help you write one.
+A repeatable system for producing **technical and scientific nonfiction**
+with Claude Code — from idea to upload-ready KDP files, a submission-ready
+paper, or a publish-ready short-form article. Not for fiction: the core of
+the system is a claim ledger that checks every prose number against code
+that actually runs, plus an editorial panel modeled on academic peer review
+(citation audits against primary sources, a math auditor, a Sainani-style
+writing-clarity pass). A novel has no such claims to verify — this tool
+doesn't help you write one.
+
+The flagship, three-command pipeline is for books:
 
 ```
 /book-author "a book about X"                → book/ + SYLLABUS.md + METADATA.md
-/scientific-book-editor ./book/              → 4 review reports + publishability
+/scientific-book-editor ./book/              → 5 review reports + publishability
                                                verdict + revised-book/  (gated)
 /production-book-publisher ./revised-book/   → dist/{ebook, paperback,
                                                hardcover, validation}
 ```
+
+The same authoring and editorial skill layer also powers two lighter
+pipelines for shorter work — a single paper (`/paper-author` +
+`/paper-publisher`) and a short-form article (`/article-author`) — see
+[Papers and short-form articles](#papers-and-short-form-articles) below.
 
 ![aimprenta: idea to sellable book](docs/diagrams/aimprenta-pipeline-animated.svg)
 
@@ -99,6 +107,51 @@ session.
 
 Read `docs/WORKFLOW.md` for the full stage-by-stage graph with every gate.
 
+## Papers and short-form articles
+
+Two lighter pipelines reuse the same authoring and editorial skill layer as
+the book pipeline, scaled to a single document instead of a multi-chapter
+manuscript. Neither shards by chapter or section — a paper or an article
+fits in one context, so the orchestration is simpler than the book pipeline
+on purpose, not a stripped-down copy of it.
+
+**A paper** (journal article, conference paper, preprint):
+
+```
+/paper-author "a research question"   → manuscript.md + references.bib
+                                        + review-report.md  (3 gates)
+/paper-publisher <paper-dir>          → submission/{paper.pdf, validation/}
+```
+
+`paper-author` makes literature grounding mandatory (never optional, unlike
+a book), drafts in one pass following the same Introduction-Arc / IMRaD
+structure `paper-review` checks against, and runs `paper-review` +
+`citation-audit` + `sciwrite` as a single non-sharded review — the
+per-chapter Scale rule from `scientific-book-editor` doesn't apply at this
+length. `paper-publisher` applies the target venue's template (an
+arXiv-style default that needs no fetch, or a named venue's own class
+fetched live at production time — venue templates are never vendored, see
+`skills/paper-publisher/references/venue-templates.md`, for the same
+license-caution reason `sciwrite` and `kindle-cover` are live-cloned) and
+runs a submission-readiness checklist (page limit, anonymization if
+double-blind, bibliography style, reproducibility).
+
+**A short-form article** (LinkedIn, Medium, a newsletter, or a plain
+markdown blog post):
+
+```
+/article-author "an angle"   → article.md + formatted/{platform}.md
+                               + platform-checklist.md  (1 gate)
+```
+
+One command, not three — a 600–2000 word piece doesn't need book-author's
+ceremony. Fact-checking is conditional, not a fixed phase: it runs only when
+the piece makes a verifiable claim, so an opinion piece isn't forced through
+a citation audit it doesn't need. Platform formatting rules (character
+limits, hashtag conventions, image specs) are checked live via WebSearch at
+production time rather than hardcoded, since they change and a stale
+remembered number is worse than a fresh lookup.
+
 Design principles behind the three orchestrators, each earned on a real book:
 
 - **Executable chapters**: prose can't drift from arithmetic — reviewers
@@ -156,9 +209,13 @@ adoption evidence.
 
 ## What it installs
 
-Three **orchestrator skills** (this repo's own, in `skills/`) on top of ~18
+Six **orchestrator skills** (this repo's own, in `skills/` — the 3 for books
+plus `paper-author`, `paper-publisher`, `article-author`) on top of ~18
 community skills and ~24 agents from 11 public repos at pinned SHAs
-(`vendors.lock`). **9 of those 11 are vendored into `vendor/` in this repo**
+(`vendors.lock`). The paper and article orchestrators install no additional
+dependencies beyond what the book pipeline already needs — they call the
+same `lit-review`, `citation-audit`, `sciwrite`, `humanizer`, `paper-review`,
+and `manuscript-revision` skills at a smaller scale. **9 of those 11 are vendored into `vendor/` in this repo**
 — `install.sh` copies them locally, no network call needed. The remaining 2
 (`sciwrite`, `kindle-cover`) have no clear upstream redistribution license,
 so they're cloned fresh from GitHub at their pinned SHA on every install
@@ -209,7 +266,7 @@ Chapters need two different kinds of figure, produced two different ways:
 
 ## License
 
-The original content of this repository — the three orchestrator skills in
+The original content of this repository — the six orchestrator skills in
 `skills/`, `install.sh`, `scripts/`, `patches/`, `docs/` — is MIT licensed,
 see [`LICENSE`](LICENSE). Code vendored under `vendor/` keeps each
 dependency's own permissive license (MIT / BSD-3-Clause), reproduced verbatim

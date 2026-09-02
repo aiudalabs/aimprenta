@@ -44,7 +44,8 @@ done
 
 # ── 2. Orchestrators (this repo's own skills) ───────────────────────────────
 log "Installing orchestrator skills"
-for s in book-author scientific-book-editor production-book-publisher; do
+for s in book-author scientific-book-editor production-book-publisher \
+         paper-author paper-publisher article-author; do
   install_dir "$HERE/skills/$s" "$SKILLS/$s" && echo "  $s" || true
 done
 
@@ -196,10 +197,18 @@ echo "  pydantic pytest reportlab Pillow pypdf fonttools pyyaml"
 log "Toolchain check"
 bash "$HERE/scripts/doctor.sh" || true
 
-log "Done. New Claude Code sessions will see the skills. Workflow:"
+log "Done. New Claude Code sessions will see the skills. Workflows:"
+echo 'Books:'
 echo '  /book-author "an idea"          → book/ + SYLLABUS.md + METADATA.md'
-echo '  /scientific-book-editor ./book/ → 4 reports + verdict + revised-book/'
+echo '  /scientific-book-editor ./book/ → 5 reports + verdict + revised-book/'
 echo '  /production-book-publisher ./revised-book/ → dist/{ebook,paperback,validation}'
+echo
+echo 'Papers:'
+echo '  /paper-author "a research question" → manuscript.md + references.bib'
+echo '  /paper-publisher <paper-dir>        → submission/{paper.pdf, validation}'
+echo
+echo 'Short-form articles (LinkedIn/Medium/blog/newsletter):'
+echo '  /article-author "an angle" → article.md + formatted/{platform}.md'
 echo
 echo 'Optional, not installed by this script (see vendor/NOTICE.md + docs/optional-skills.md):'
 echo '  scientific-manuscript-review — npx skills add <source> --skill scientific-manuscript-review'
