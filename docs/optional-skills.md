@@ -7,12 +7,23 @@ them.
 
 ## scientific-manuscript-review
 
-Used ad hoc during the *Fundamentos de Machine Learning* production run
-(2026-09-02) as an emergency deep-read audit after the standard editorial
-pipeline (Phase 1–6 of `scientific-book-editor`) had already passed the
-manuscript — it caught a book-wide voice/terminology problem none of the
-per-chapter or per-dimension reviewers surfaced, because it was the only pass
-that read chapters end-to-end the way a human reader does.
+Originally used ad hoc during the *Fundamentos de Machine Learning*
+production run (2026-09-02) as an emergency deep-read audit after the
+standard editorial pipeline had already passed the manuscript — it caught a
+book-wide voice/terminology problem none of the per-chapter or
+per-dimension reviewers surfaced, because it was the only pass that read
+chapters end-to-end the way a human reader does.
+
+That specific gap is now covered natively: `scientific-book-editor`'s
+**Phase 7** is a mandatory, gated whole-manuscript coherence read built
+directly into the pipeline (see `skills/scientific-book-editor/SKILL.md`),
+so this skill is no longer the primary mitigation for a book-wide
+voice/repetition problem. What it's still useful for is a *second*,
+differently-structured whole-book read — its IMRaD-oriented, per-section
+(gap statement / results paragraph / discussion arc) checklist catches
+things a coherence-focused pass isn't looking for, particularly on books
+closer to a research-paper register than a textbook one. Reach for it as a
+supplementary deep read, not a required step.
 
 Installer: [skills.sh](https://skills.sh) marketplace (`npx skills add`), not
 a plain git clone — a different mechanism from every other dependency in this
@@ -24,11 +35,10 @@ repo. Source: [github.com/lyndonkl/claude](https://github.com/lyndonkl/claude)
 npx skills add https://github.com/lyndonkl/claude --skill scientific-manuscript-review
 ```
 
-Suggested use: after `scientific-book-editor` finishes and before
-`production-book-publisher` runs, spot-read 2–3 chapters yourself first. If
-you suspect a whole-book voice/repetition problem invisible to per-chapter
-review (the exact failure mode this caught), invoke this skill over the full
-`revised-book/` directory.
+Suggested use: after `scientific-book-editor`'s Phase 7 has already run and
+been applied, and before `production-book-publisher` runs, invoke this
+skill over `revised-book/` if you want a second opinion in a different
+review frame — not as a substitute for Phase 7.
 
 ## Diagram tools (see `docs/diagrams.md`)
 
