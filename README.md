@@ -2,8 +2,13 @@
 
 **[aiudalabs.github.io/aimprenta →](https://aiudalabs.github.io/aimprenta/)**
 
-A repeatable, three-command system for producing professional technical books
-with Claude Code — from idea to upload-ready KDP files.
+A repeatable, three-command system for producing **technical and scientific
+nonfiction** with Claude Code — from idea to upload-ready KDP files. Not for
+fiction: the core of the system is a claim ledger that checks every prose
+number against code that actually runs, plus an editorial panel modeled on
+academic peer review (citation audits against primary sources, a math
+auditor, a Sainani-style writing-clarity pass). A novel has no such claims to
+verify — this tool doesn't help you write one.
 
 ```
 /book-author "a book about X"                → book/ + SYLLABUS.md + METADATA.md
@@ -24,10 +29,22 @@ JS, so it plays inline right here on GitHub. Source:
 
 ## Install
 
+Three steps: install the skills once (anywhere, they install globally —
+**not** into this cloned folder), then go work in your actual book's folder.
+
 ```bash
+# 1. Install the skills — one time, from wherever you clone this repo.
+#    install.sh writes to ~/.claude/, not to this directory, so it doesn't
+#    matter where you keep the clone afterward.
 git clone https://github.com/aiudalabs/aimprenta.git && cd aimprenta
 ./install.sh --check     # doctor only: see what tooling is missing
 ./install.sh             # idempotent; --force overwrites existing skills
+
+# 2. Go to (or create) the folder where your book will actually live —
+#    NOT inside the aimprenta clone.
+mkdir ~/my-book && cd ~/my-book
+
+# 3. Open Claude Code in that folder, then run the slash commands below.
 ```
 
 9 of 11 dependencies come from `vendor/` in this repo — no network needed for
