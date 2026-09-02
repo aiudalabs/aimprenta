@@ -1,0 +1,269 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "book-pipeline: idea to sellable book",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "manuscript",
+        "label": "Idea to manuscript",
+        "focus": [
+          "idea",
+          "outline",
+          "brief_gate",
+          "draft"
+        ],
+        "note": "book-author turns a one-line idea into a reviewed manuscript with executable chapters, gated on the author's approval of brief and outline."
+      },
+      {
+        "id": "editorial",
+        "label": "Editorial QA",
+        "focus": [
+          "draft",
+          "qa",
+          "revise_gate",
+          "revise"
+        ],
+        "note": "Six review phases, gated on the author choosing which findings to apply."
+      },
+      {
+        "id": "production",
+        "label": "Sellable artifacts",
+        "focus": [
+          "revise",
+          "artifacts"
+        ],
+        "note": "production-book-publisher turns revised-book/ into interior PDF, EPUB3, cover, and a KDP validation report."
+      }
+    ],
+    "output": "book-pipeline.html"
+  },
+  "lanes": [
+    {
+      "id": "author",
+      "label": "book-author"
+    },
+    {
+      "id": "gate",
+      "label": "Author approval",
+      "variant": "exception"
+    },
+    {
+      "id": "editor",
+      "label": "scientific-book-editor"
+    },
+    {
+      "id": "production",
+      "label": "production-book-publisher"
+    }
+  ],
+  "phases": [
+    {
+      "id": "manuscript",
+      "label": "Idea → manuscript",
+      "fromCol": 0,
+      "toCol": 2
+    },
+    {
+      "id": "editorial_qa",
+      "label": "Editorial QA",
+      "fromCol": 3,
+      "toCol": 4,
+      "variant": "emphasis"
+    },
+    {
+      "id": "artifacts_phase",
+      "label": "Sellable artifacts",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "groups": [
+    {
+      "id": "chapter_agents",
+      "label": "17 chapter agents, parallel",
+      "lane": "author",
+      "fromCol": 2,
+      "toCol": 2,
+      "variant": "emphasis"
+    },
+    {
+      "id": "seven_reviewers",
+      "label": "7-reviewer panel + peer + citations + sciwrite",
+      "lane": "editor",
+      "fromCol": 3,
+      "toCol": 3,
+      "variant": "emphasis"
+    }
+  ],
+  "mainPath": [
+    "idea",
+    "outline",
+    "brief_gate",
+    "draft",
+    "qa",
+    "revise_gate",
+    "revise",
+    "artifacts"
+  ],
+  "nodes": [
+    {
+      "id": "idea",
+      "lane": "author",
+      "col": 0,
+      "type": "frontend",
+      "label": "Idea",
+      "sublabel": "one-line brief",
+      "width": 132
+    },
+    {
+      "id": "outline",
+      "lane": "author",
+      "col": 1,
+      "type": "frontend",
+      "label": "Outline",
+      "sublabel": "SYLLABUS.md",
+      "width": 132
+    },
+    {
+      "id": "brief_gate",
+      "lane": "gate",
+      "col": 1,
+      "type": "security",
+      "label": "Approve",
+      "sublabel": "brief + outline",
+      "tag": "human gate",
+      "width": 132
+    },
+    {
+      "id": "draft",
+      "lane": "author",
+      "col": 2,
+      "type": "backend",
+      "label": "Draft chapters",
+      "sublabel": "code + tests + claims",
+      "tag": "17 agents",
+      "width": 132
+    },
+    {
+      "id": "qa",
+      "lane": "editor",
+      "col": 3,
+      "type": "security",
+      "label": "Editorial QA",
+      "sublabel": "panel + peer + citations",
+      "tag": "10 review passes",
+      "width": 132
+    },
+    {
+      "id": "revise_gate",
+      "lane": "gate",
+      "col": 3,
+      "type": "security",
+      "label": "Approve",
+      "sublabel": "revision policy",
+      "tag": "human gate",
+      "width": 132
+    },
+    {
+      "id": "revise",
+      "lane": "editor",
+      "col": 4,
+      "type": "backend",
+      "label": "Revise + copyedit",
+      "sublabel": "revised-book/",
+      "width": 132
+    },
+    {
+      "id": "artifacts",
+      "lane": "production",
+      "col": 5,
+      "type": "external",
+      "label": "Interior + EPUB",
+      "sublabel": "dist/, KDP-ready",
+      "tag": "1 emergency rewrite loop",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "id": "idea-outline",
+      "from": "idea",
+      "to": "outline",
+      "variant": "default"
+    },
+    {
+      "id": "outline-gate",
+      "from": "outline",
+      "to": "brief_gate",
+      "label": "review",
+      "variant": "security"
+    },
+    {
+      "id": "gate-draft",
+      "from": "brief_gate",
+      "to": "draft",
+      "label": "approved",
+      "variant": "emphasis"
+    },
+    {
+      "id": "draft-qa",
+      "from": "draft",
+      "to": "qa",
+      "label": "manuscript",
+      "variant": "default"
+    },
+    {
+      "id": "qa-gate",
+      "from": "qa",
+      "to": "revise_gate",
+      "label": "findings",
+      "variant": "security"
+    },
+    {
+      "id": "gate-revise",
+      "from": "revise_gate",
+      "to": "revise",
+      "label": "approved",
+      "variant": "emphasis"
+    },
+    {
+      "id": "revise-artifacts",
+      "from": "revise",
+      "to": "artifacts",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "One happy path",
+      "items": [
+        "Idea to reviewed manuscript in one skill (book-author)",
+        "Six-phase editorial QA gated on the author's approval",
+        "Revised source becomes interior, EPUB, cover, and KDP report"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Where humans stop it",
+      "items": [
+        "Brief + outline need explicit sign-off before drafting starts",
+        "Revision policy is chosen by the author, never assumed",
+        "Every review shard reads chapters, never the whole book at once"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "What no gate caught (Fundamentos de ML, 2026-09-02)",
+      "items": [
+        "7 reviewers + peer review + citations + sciwrite all passed the manuscript",
+        "The defect only existed accumulated, across 76,000 words of repeated house jargon",
+        "Caught by the author reading the finished book once; fixed by 9 agents rewriting the voice in parallel, then re-running production"
+      ]
+    }
+  ]
+}
