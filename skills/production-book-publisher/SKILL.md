@@ -104,8 +104,43 @@ metadata) — never stock images with unknown licenses.
   production time is a Critical (the manuscript changed after its last
   verification).
 
-**Gate:** Critical findings must be either fixed and re-built, or explicitly
-accepted by the user, before Step 11.
+### Visual spot-check (MANDATORY — not satisfied by any automated tool passing)
+
+This happened for real: `pdfinfo`, page-count checks, and `epubcheck` all
+reported success on an interior with a book-wide chapter-numbering bug (a
+front-matter file with no heading silently consumed chapter 1, shifting
+every later chapter's printed number by one). None of the automated checks
+above can catch this class of defect — only looking at rendered pages can.
+This step is a hard requirement of Step 10, not an optional nice-to-have,
+and it is not satisfied by delegating it to a subagent's self-report — the
+orchestrator must actually view the rasterized pages itself (e.g.
+`pdftoppm -png -r 100 -f N -l M interior.pdf out` then the Read tool on the
+resulting images).
+
+Minimum required sample, every production run:
+
+1. **Front matter** — page 1 and the next 2–3 pages (title page, copyright,
+   TOC). Confirm there is no stray phantom heading or duplicated title.
+2. **One math-heavy page**, **one figure page**, **one table page** —
+   confirm equations/figures/tables render intact, not as `[missing image]`
+   or broken LaTeX.
+3. **At least 3 pages spread across the book** (roughly 25%, 50%, 75%
+   through) — for each, confirm the *visible printed chapter/section
+   number on the page* matches that chapter's known topic from the source
+   file order. This is the specific check that catches an offset bug: a
+   page-count or `pdfinfo` check has no way to know that "chapter 8" on the
+   page should have been "chapter 7."
+4. Cross-check chapter numbering further with a table-of-contents extract
+   (`pdftotext -f <toc-pages> - | grep -E "^[0-9]+"`) against the expected
+   chapter topics for at least the first and last third of the book — cheap
+   to run and catches a numbering offset without rasterizing every page.
+
+Findings from this check are Criticals, same severity class as a preflight
+failure — record them in `validation/pdf-preflight.txt` alongside the
+automated results, explicitly labeled "visual spot-check."
+
+**Gate:** Critical findings (automated or visual) must be either fixed and
+re-built, or explicitly accepted by the user, before Step 11.
 
 ## Step 11 — Distribution (`ebook-publishing` skill)
 

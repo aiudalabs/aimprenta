@@ -83,8 +83,14 @@ session.
    Presents the consolidated findings and a publishability verdict
    (PUBLISH / MINOR / MAJOR / DON'T) and **waits for you to approve which
    findings to apply** before touching anything. Only then copies the book to
-   `revised-book/`, applies the approved fixes, and runs a final copyedit
-   pass. Output: 4 report files under `editorial/`, `revised-book/*.md`.
+   `revised-book/`, applies the approved fixes, runs a final copyedit pass,
+   and finishes with a **mandatory whole-manuscript coherence read** — one
+   continuous read of the entire book, not chapter-sharded like every phase
+   before it, specifically hunting for defects that only exist accumulated
+   across the whole manuscript (repeated house terminology, template
+   fatigue, voice drift) that no per-chapter reviewer can see by
+   construction. Output: 5 report files under `editorial/`,
+   `revised-book/*.md`.
 3. **`/production-book-publisher ./revised-book/`** — builds a print interior
    (Quarto/LaTeX), a validated EPUB3, wrap covers with a computed spine
    width, runs PDF preflight and a KDP compliance audit, and produces
@@ -116,6 +122,17 @@ Design principles behind the three orchestrators, each earned on a real book:
   missing ISBNs are reported absent, never placeholder-filled.
 - **Quarto crossref labels** (`#tbl-* / #sec-* / #eq-*`) from the outline
   onward — production resolves them natively in both PDF and EPUB.
+- **A whole-book read is mandatory, not optional**: every review phase
+  shards by chapter — correct for what those phases check, but structurally
+  blind to a defect that only exists accumulated across the whole
+  manuscript. `scientific-book-editor` Phase 7 is the one pass whose scope
+  is the entire book, on purpose, before it becomes canonical.
+- **Automated checks don't see the page**: `pdfinfo`, page counts, and
+  `epubcheck` can all pass while the interior is wrong — they never render
+  anything. `production-book-publisher` Step 10 requires actually viewing
+  rasterized sample pages (front matter, a math/figure/table page, and
+  pages spread across the book cross-checked against expected chapter
+  topics) before a build is called done.
 
 `docs/community-validation.md` maps each of these practices to its
 community-validated equivalent (nbval, artifact evaluation, Paged.js, …) with
@@ -135,7 +152,7 @@ single dependency and the reasoning behind the split.
 | Layer | Skills | Source | Self-contained? |
 |---|---|---|---|
 | **Authoring** (Phase 0) | textbook-methodology, notebook-paired-with-prose, cross-reference-discipline, manuscript-drafting, lit-review, humanizer + 11 bookwright agents | claude-anvil (bookwright), research-skills | ✅ vendored |
-| **Editorial** (steps 1–6) | 12 academic reviewer agents, paper-review, citation-audit*, sciwrite, manuscript-revision*, line-and-copy-editor | academic-writing-agents, research-skills, academic-human-in-the-loop, sciwrite, manuscript-writing, claude-skills | 5 of 6 vendored; **sciwrite live-clones** |
+| **Editorial** (steps 1–7) | 12 academic reviewer agents, paper-review, citation-audit*, sciwrite, manuscript-revision*, line-and-copy-editor | academic-writing-agents, research-skills, academic-human-in-the-loop, sciwrite, manuscript-writing, claude-skills | 5 of 6 vendored; **sciwrite live-clones** |
 | **Production** (steps 7–11) | book-typesetting, kindle-book, kindle-cover, kdp-audit, kdp-listing, ebook-publishing | book-typesetting-skill, kindle-\*-skill, claude-anvil (kdp), ebook-publishing-skill | 5 of 6 vendored; **kindle-cover live-clones** (+ a local patch, see below) |
 
 \* adapted at install: citation-audit is rewired from the OpenAI Codex MCP to
