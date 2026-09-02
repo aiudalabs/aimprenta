@@ -64,6 +64,16 @@ running threads):
   by a runnable module in `code/chNN/`, with a test suite pinning the printed
   numbers. This is what makes the later review phases verify instead of
   trust. Fresh-kernel execution before a chapter is called done.
+- **Two different kinds of figure, two different tools.** A figure that
+  plots computed values (loss curves, decision boundaries, a scatter of real
+  data) MUST stay code-generated per the rule above — that's the whole point
+  of `notebook-paired-with-prose`, and a templated diagram tool would break
+  the "every number comes from executed code" guarantee. A figure that's
+  purely conceptual — an architecture map, a flowchart of the algorithm's
+  five stages, a pipeline diagram, anything with no data behind it — use the
+  `diagram-design` plugin instead of hand-rolling it in matplotlib; it
+  produces editorial-quality static HTML/SVG (39 layout types) with no
+  numbers to get wrong. See `docs/diagrams.md`.
 - **The claim ledger (`passport.yaml`)** — pytest pins protect tables; the
   errors that survive live in PROSE claims about numbers ("more than a
   third", "nearly certain"). So every prose sentence asserting a specific
