@@ -11,6 +11,15 @@ with Claude Code — from idea to upload-ready KDP files.
                                                hardcover, validation}
 ```
 
+![aimprenta: idea to sellable book](docs/diagrams/aimprenta-pipeline-animated.svg)
+
+An idea moves through `book-author`, waits at two human approval gates,
+gets a 7-reviewer editorial pass in `scientific-book-editor`, and comes out
+as a shippable interior + EPUB from `production-book-publisher`. The dashed
+edges and the traveling marker are live CSS/SMIL animation — plain SVG, no
+JS, so it plays inline right here on GitHub. Source:
+[`aimprenta-pipeline-animated.svg`](docs/diagrams/aimprenta-pipeline-animated.svg).
+
 ## Install
 
 ```bash
