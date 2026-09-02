@@ -8,14 +8,14 @@ any of the three skills.
 ## archify — process diagrams for this repo's own docs
 
 **Job:** diagram how the pipeline itself works — the kind of thing that goes
-in a README, not in a book. `docs/diagrams/book-pipeline.{workflow.json,html,svg}`
+in a README, not in a book. `docs/diagrams/aimprenta-pipeline.{workflow.json,html}`
 is the working example: it maps the real run that produced *Fundamentos de
 Machine Learning*, both approval gates included, generated from a typed JSON
 spec and validated against archify's own layout checker before delivery.
 
 - Install: `npx skills add tt-a1i/archify -g`
 - Author a `<type>.json` (`workflow` fits a pipeline like this one best —
-  see `docs/diagrams/book-pipeline.workflow.json` for a validated example),
+  see `docs/diagrams/aimprenta-pipeline.workflow.json` for a validated example),
   then:
   ```bash
   node ~/.claude/skills/archify/bin/archify.mjs validate workflow spec.json --quality showcase --json
@@ -26,15 +26,15 @@ spec and validated against archify's own layout checker before delivery.
   block as a standalone file** — it looks complete but its styling lives in
   the surrounding HTML's `<style>`, not inside the SVG itself; opened alone
   it renders as an unstyled XML tree (verified: this is exactly what
-  happened on the first pass building `book-pipeline-preview.png`, caught
+  happened on the first pass building `aimprenta-pipeline-preview.png`, caught
   by actually opening the extracted file in a browser before shipping it).
   For a README, open the delivered `.html` in a real browser and screenshot
   the diagram panel instead — that's how
-  `docs/diagrams/book-pipeline-preview.png` was made. Link the `.html` file
+  `docs/diagrams/aimprenta-pipeline-preview.png` was made. Link the `.html` file
   itself for the interactive, animated version.
 - Hard layout constraint worth knowing before authoring: workflow columns
   are capped at 6 (`col` 0–5). Compress the story into ≤12 nodes rather than
-  fighting the validator — `book-pipeline.workflow.json` collapses each
+  fighting the validator — `aimprenta-pipeline.workflow.json` collapses each
   editorial-QA sub-phase into one node with a `tag` for the count, and
   carries the deeper narrative in `cards` instead of extra nodes.
 

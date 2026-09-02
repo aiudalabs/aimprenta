@@ -1,4 +1,4 @@
-# The book-pipeline workflow
+# The aimprenta workflow
 
 Three commands, eleven steps, four user gates. Validated end-to-end 2026-09-01
 on "Collision Math for Engineers" (idea → upload-ready in one session).

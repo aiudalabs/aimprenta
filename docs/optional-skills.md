@@ -33,7 +33,7 @@ review (the exact failure mode this caught), invoke this skill over the full
 ## Diagram tools (see `docs/diagrams.md`)
 
 `archify` and `diagram-design` are Claude Code / Codex / Cursor skills and
-plugins, not book-pipeline dependencies — they don't touch the manuscript
+plugins, not aimprenta dependencies — they don't touch the manuscript
 pipeline at all, only how process diagrams (this repo's own docs) and in-book
 conceptual figures get drawn. Kept separate from `vendors.lock` on purpose:
 neither produces book *content*, so neither belongs in the reproducibility

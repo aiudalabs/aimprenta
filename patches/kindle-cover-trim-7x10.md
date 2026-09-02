@@ -1,4 +1,4 @@
-> **LOCAL PATCH (book-pipeline install):** Upstream `generate_cover.py` only
+> **LOCAL PATCH (aimprenta install):** Upstream `generate_cover.py` only
 > supports four trim sizes (`5x8`, `5.5x8.5`, `6x9`, `8.5x11`). Technical books
 > with heavy code/figure density commonly use **7×10 in** (KDP-supported, not
 > upstream-supported). This patch adds one entry to `TRIM_SIZES`:

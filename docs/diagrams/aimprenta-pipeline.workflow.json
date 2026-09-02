@@ -2,7 +2,7 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "book-pipeline: idea to sellable book",
+    "title": "aimprenta: idea to sellable book",
     "animation": "trace",
     "quality_profile": "showcase",
     "views": [
@@ -38,7 +38,7 @@
         "note": "production-book-publisher turns revised-book/ into interior PDF, EPUB3, cover, and a KDP validation report."
       }
     ],
-    "output": "book-pipeline.html"
+    "output": "aimprenta-pipeline.html"
   },
   "lanes": [
     {

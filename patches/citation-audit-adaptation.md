@@ -1,4 +1,4 @@
-> **LOCAL ADAPTATION (book-pipeline install):** Upstream, this skill runs each
+> **LOCAL ADAPTATION (aimprenta install):** Upstream, this skill runs each
 > per-entry reviewer call through the OpenAI Codex CLI (`mcp__codex__codex`, fresh
 > thread per entry). That MCP is not part of this pipeline. Wherever the procedure
 > below says to invoke `mcp__codex__codex` (or start a fresh Codex thread), instead

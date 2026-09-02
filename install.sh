@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# book-pipeline installer — reproduces the full 3-command book pipeline on any machine.
+# aimprenta installer — reproduces the full 3-command book pipeline on any machine.
 # Idempotent: existing installs are skipped unless --force. Test with CLAUDE_DIR=/tmp/x ./install.sh
 #
 # Self-contained: 9 of 11 upstream dependencies are vendored under vendor/ in
@@ -14,7 +14,7 @@ SKILLS="$CLAUDE_DIR/skills"
 AGENTS="$CLAUDE_DIR/agents"
 VENDOR="$HERE/vendor"                    # self-contained, checked into this repo
 LIVE="$SKILLS/_vendor"                   # git-clone-at-install, sciwrite + kindle-cover only
-VENV="$CLAUDE_DIR/venvs/book-pipeline"
+VENV="$CLAUDE_DIR/venvs/aimprenta"
 FORCE=0
 [ "${1:-}" = "--force" ] && FORCE=1
 [ "${1:-}" = "--check" ] && { bash "$HERE/scripts/doctor.sh"; exit $?; }
