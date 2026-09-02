@@ -22,11 +22,16 @@ spec and validated against archify's own layout checker before delivery.
   node ~/.claude/skills/archify/bin/archify.mjs deliver  workflow spec.json output.html --quality showcase
   ```
 - The delivered `.html` is where the real animation/motion lives — it depends
-  on the viewer's own JS+CSS (~186KB), which doesn't survive being flattened
-  into a portable standalone SVG. For a README, extract the `<svg>…</svg>`
-  block for a static preview image and link the `.html` for the interactive,
-  animated version — that's what `docs/diagrams/book-pipeline.svg` +
-  `docs/diagrams/book-pipeline.html` are.
+  on the viewer's own JS+CSS (~186KB). **Don't extract the `<svg>…</svg>`
+  block as a standalone file** — it looks complete but its styling lives in
+  the surrounding HTML's `<style>`, not inside the SVG itself; opened alone
+  it renders as an unstyled XML tree (verified: this is exactly what
+  happened on the first pass building `book-pipeline-preview.png`, caught
+  by actually opening the extracted file in a browser before shipping it).
+  For a README, open the delivered `.html` in a real browser and screenshot
+  the diagram panel instead — that's how
+  `docs/diagrams/book-pipeline-preview.png` was made. Link the `.html` file
+  itself for the interactive, animated version.
 - Hard layout constraint worth knowing before authoring: workflow columns
   are capped at 6 (`col` 0–5). Compress the story into ≤12 nodes rather than
   fighting the validator — `book-pipeline.workflow.json` collapses each
