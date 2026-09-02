@@ -29,8 +29,10 @@ JS, so it plays inline right here on GitHub. Source:
 
 ## Install
 
-Three steps: install the skills once (anywhere, they install globally —
-**not** into this cloned folder), then go work in your actual book's folder.
+Three steps. You `cd` into the clone to *run* the installer, but everything
+it writes goes to `~/.claude/` (global) — not into this folder — so the clone
+itself is disposable once install.sh finishes. Then go work in your actual
+book's folder.
 
 ```bash
 # 1. Install the skills — one time, from wherever you clone this repo.
