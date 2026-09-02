@@ -107,52 +107,7 @@ session.
 
 Read `docs/WORKFLOW.md` for the full stage-by-stage graph with every gate.
 
-## Papers and short-form articles
-
-Two lighter pipelines reuse the same authoring and editorial skill layer as
-the book pipeline, scaled to a single document instead of a multi-chapter
-manuscript. Neither shards by chapter or section — a paper or an article
-fits in one context, so the orchestration is simpler than the book pipeline
-on purpose, not a stripped-down copy of it.
-
-**A paper** (journal article, conference paper, preprint):
-
-```
-/paper-author "a research question"   → manuscript.md + references.bib
-                                        + review-report.md  (3 gates)
-/paper-publisher <paper-dir>          → submission/{paper.pdf, validation/}
-```
-
-`paper-author` makes literature grounding mandatory (never optional, unlike
-a book), drafts in one pass following the same Introduction-Arc / IMRaD
-structure `paper-review` checks against, and runs `paper-review` +
-`citation-audit` + `sciwrite` as a single non-sharded review — the
-per-chapter Scale rule from `scientific-book-editor` doesn't apply at this
-length. `paper-publisher` applies the target venue's template (an
-arXiv-style default that needs no fetch, or a named venue's own class
-fetched live at production time — venue templates are never vendored, see
-`skills/paper-publisher/references/venue-templates.md`, for the same
-license-caution reason `sciwrite` and `kindle-cover` are live-cloned) and
-runs a submission-readiness checklist (page limit, anonymization if
-double-blind, bibliography style, reproducibility).
-
-**A short-form article** (LinkedIn, Medium, a newsletter, or a plain
-markdown blog post):
-
-```
-/article-author "an angle"   → article.md + formatted/{platform}.md
-                               + platform-checklist.md  (1 gate)
-```
-
-One command, not three — a 600–2000 word piece doesn't need book-author's
-ceremony. Fact-checking is conditional, not a fixed phase: it runs only when
-the piece makes a verifiable claim, so an opinion piece isn't forced through
-a citation audit it doesn't need. Platform formatting rules (character
-limits, hashtag conventions, image specs) are checked live via WebSearch at
-production time rather than hardcoded, since they change and a stale
-remembered number is worse than a fresh lookup.
-
-Design principles behind the three orchestrators, each earned on a real book:
+Design principles behind the three book orchestrators, each earned on a real book:
 
 - **Executable chapters**: prose can't drift from arithmetic — reviewers
   verify instead of trusting.
@@ -206,6 +161,55 @@ Design principles behind the three orchestrators, each earned on a real book:
 `docs/community-validation.md` maps each of these practices to its
 community-validated equivalent (nbval, artifact evaluation, Paged.js, …) with
 adoption evidence.
+
+## Papers and short-form articles
+
+Two lighter pipelines reuse the same authoring and editorial skill layer as
+the book pipeline, scaled to a single document instead of a multi-chapter
+manuscript. Neither shards by chapter or section — a paper or an article
+fits in one context, so the orchestration is simpler than the book pipeline
+on purpose, not a stripped-down copy of it.
+
+**A paper** (journal article, conference paper, preprint):
+
+```
+/paper-author "a research question"   → manuscript.md + references.bib
+                                        + review-report.md  (3 gates)
+/paper-publisher <paper-dir>          → submission/{paper.pdf, validation/}
+```
+
+![aimprenta: research question to submission-ready paper](docs/diagrams/aimprenta-paper-pipeline.svg)
+
+`paper-author` makes literature grounding mandatory (never optional, unlike
+a book), drafts in one pass following the same Introduction-Arc / IMRaD
+structure `paper-review` checks against, and runs `paper-review` +
+`citation-audit` + `sciwrite` as a single non-sharded review — the
+per-chapter Scale rule from `scientific-book-editor` doesn't apply at this
+length. `paper-publisher` applies the target venue's template (an
+arXiv-style default that needs no fetch, or a named venue's own class
+fetched live at production time — venue templates are never vendored, see
+`skills/paper-publisher/references/venue-templates.md`, for the same
+license-caution reason `sciwrite` and `kindle-cover` are live-cloned) and
+runs a submission-readiness checklist (page limit, anonymization if
+double-blind, bibliography style, reproducibility).
+
+**A short-form article** (LinkedIn, Medium, a newsletter, or a plain
+markdown blog post):
+
+```
+/article-author "an angle"   → article.md + formatted/{platform}.md
+                               + platform-checklist.md  (1 gate)
+```
+
+![aimprenta: angle to publish-ready short-form article](docs/diagrams/aimprenta-article-pipeline.svg)
+
+One command, not three — a 600–2000 word piece doesn't need book-author's
+ceremony. Fact-checking is conditional, not a fixed phase: it runs only when
+the piece makes a verifiable claim, so an opinion piece isn't forced through
+a citation audit it doesn't need. Platform formatting rules (character
+limits, hashtag conventions, image specs) are checked live via WebSearch at
+production time rather than hardcoded, since they change and a stale
+remembered number is worse than a fresh lookup.
 
 ## What it installs
 

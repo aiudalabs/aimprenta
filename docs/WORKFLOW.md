@@ -1,11 +1,17 @@
 # The aimprenta workflow
 
-Three commands, thirteen steps, five user gates. Validated end-to-end
-2026-09-01 on "Collision Math for Engineers" (idea → upload-ready in one
-session); the deterministic gates, coherence read, and visual spot-check
-below were added after a second real book (a Spanish ML textbook) surfaced
-the gaps they close — see the design principles in the main
-[README](../README.md#using-it) for the incidents that motivated each one.
+This file details the flagship pipeline — books. Three commands, thirteen
+steps, five user gates. Validated end-to-end 2026-09-01 on "Collision Math
+for Engineers" (idea → upload-ready in one session); the deterministic
+gates, coherence read, and visual spot-check below were added after a
+second real book (a Spanish ML textbook) surfaced the gaps they close — see
+the design principles in the main [README](../README.md#using-it) for the
+incidents that motivated each one.
+
+The two lighter pipelines — [papers](#the-paper-workflow) and
+[short-form articles](#the-article-workflow) — reuse the same skill layer
+at a smaller scale and get their own, much shorter sections near the bottom
+of this file, since neither needs a stage-by-stage breakdown this detailed.
 
 ```
 IDEA
@@ -151,3 +157,79 @@ Adopted since this list was written: the `passport.yaml` per-claim
 PASS/FAIL/STALE ledger (Stage 4, enforced by `check_claims.py`) and the
 advocate/skeptic adversarial pair (Phase 1) are both now standard, not
 recommendations.
+
+## The paper workflow
+
+`paper-author` + `paper-publisher`. Never shards — a paper fits in one
+reviewer's context, so the Scale rule that drives the book pipeline's
+per-chapter parallelism doesn't apply here. See
+[`aimprenta-paper-pipeline.svg`](diagrams/aimprenta-paper-pipeline.svg) for
+the diagram version of this graph.
+
+```
+RESEARCH QUESTION
+  │
+  ▼ /paper-author "a research question"
+┌─────────────────────────────────────────────────────────────┐
+│ Frame     research question, thesis, target venue → BRIEF.md │
+│ Sources   lit-review — MANDATORY, never skipped for a paper  │
+│ Draft     manuscript-drafting, single pass, no chapter-sharded│
+│           agents; Introduction Arc / IMRaD structure          │
+│                                         ══ GATE: approve ══  │
+│           scope, sources, and venue                          │
+│ Review    paper-review (single or panel) + citation-audit +  │
+│           sciwrite, all three read the whole manuscript —    │
+│           nothing to shard at this length                    │
+│                                         ══ GATE: approve ══  │
+│           application policy                                 │
+│ Revise    manuscript-revision on the approved findings;       │
+│           passport.yaml claims (if any) re-verified           │
+└─────────────────────────────────────────────────────────────┘
+  │  manuscript.md + references.bib
+  ▼ /paper-publisher <paper-dir>
+┌─────────────────────────────────────────────────────────────┐
+│ Template  arXiv-style default (no fetch needed) or a named    │
+│           venue's own class fetched live — never vendored,   │
+│           see skills/paper-publisher/references/              │
+│           venue-templates.md                                 │
+│ Build     latexmk → paper.pdf; check_claims.py re-verification│
+│           if the paper ships a passport.yaml                  │
+│ Checklist page/word limit, anonymization if double-blind,     │
+│           bibliography style, reproducibility statement       │
+│                                         ══ GATE: Criticals ══│
+│                                         ══ fixed or accepted ═│
+└─────────────────────────────────────────────────────────────┘
+  │
+  ▼  submission/{paper.pdf, references.bib, validation/}
+```
+
+## The article workflow
+
+`article-author` alone — one command, not three. A 600–2000 word piece
+doesn't earn book-author's ceremony. See
+[`aimprenta-article-pipeline.svg`](diagrams/aimprenta-article-pipeline.svg)
+for the diagram version of this graph.
+
+```
+ANGLE
+  │
+  ▼ /article-author "an angle"
+┌─────────────────────────────────────────────────────────────┐
+│ Angle       thesis, audience, the one claim the piece exists │
+│             to land                                           │
+│ Fact-check  CONDITIONAL — only if the piece makes a           │
+│             verifiable claim; skipped entirely for opinion    │
+│             pieces, not a fixed phase                         │
+│ Draft       single pass, one thesis, platform-appropriate     │
+│             voice                                              │
+│ Editorial   sciwrite (targeted, clarity/voice) + humanizer     │
+│                                         ══ GATE: approve ══  │
+│                                         to publish — the only │
+│                                         gate in this pipeline │
+│ Format      per platform (LinkedIn/Medium/plain markdown/     │
+│             newsletter); limits/conventions checked live via  │
+│             WebSearch, never hardcoded — they change          │
+└─────────────────────────────────────────────────────────────┘
+  │
+  ▼  article.md + formatted/{platform}.md + platform-checklist.md
+```

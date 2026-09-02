@@ -30,6 +30,35 @@ opening it in a real browser — don't trust a raw file:// open or an
 ImageMagick rasterization; both handle embedded SVG fonts/CSS differently
 than a real renderer.
 
+## The paper and article diagrams — hand-authored static SVG
+
+**Files:** [`docs/diagrams/aimprenta-paper-pipeline.svg`](diagrams/aimprenta-paper-pipeline.svg)
+and [`docs/diagrams/aimprenta-article-pipeline.svg`](diagrams/aimprenta-article-pipeline.svg),
+embedded under README.md's "Papers and short-form articles" section.
+
+Same hand-authored approach and palette as the book diagram above (lanes,
+node boxes, the same teal/rust/red/blue color system), but plain static
+SVG — no `@keyframes`, no `<animateMotion>`. The book diagram earned its
+animation because it's the page's hero image; these two are secondary
+illustrations of lighter pipelines, so the extra build/verification cost of
+animating them wasn't worth it. Edges use a plain SVG `<marker>` arrowhead
+instead of the book diagram's hand-computed triangle polygons — simpler to
+maintain, and safe here since these are standalone `.svg` files loaded via
+`<img>`/markdown image syntax, not inline HTML.
+
+**A routing bug worth knowing about if you edit these:** an edge's
+right-angle path can visually appear to connect to the wrong node if an
+intermediate waypoint's coordinates happen to fall inside a *different*
+node's box along the way — the line reads as "connects to that box" even
+where the box's opaque fill later hides the overlapping segment, because
+node boxes are drawn after edges. This happened once in
+`aimprenta-paper-pipeline.svg` (a gate-to-gate false connection) and once in
+`aimprenta-article-pipeline.svg` (draft-to-editorial passing through the
+gate box) while building these — both fixed by routing the intermediate
+waypoint through empty space between lane bands instead of through another
+node's column. Always preview a routing change in a real browser
+(`python3 -m http.server`, not a raw `file://` open) before trusting it.
+
 ## archify — optional, for local interactive exploration
 
 **Job:** an *interactive*, explorable version of the same pipeline map — real
